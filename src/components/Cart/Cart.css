@@ -1,0 +1,4 @@
+.div-prod-cart{
+    display: flex;
+    flex-flow: column nowrap;
+}

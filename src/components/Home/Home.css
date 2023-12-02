@@ -1,0 +1,28 @@
+.div-prods-general{
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.div-prod{
+    display: flex;
+    flex-flow: column nowrap;
+    max-width: 200px;
+    background-color: white;
+    padding: 8px;
+    margin: 5px 5px;
+    border-radius: 10px;
+    justify-items: center;
+    align-items: center;
+}
+
+.div-prod img{
+    object-fit: contain;
+}
+
+.link-item-detail{
+    color: black;
+}
+
+.link-item-detail:hover{
+    cursor: pointer;
+}

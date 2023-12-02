@@ -1,0 +1,41 @@
+.div-controlPanel{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.div-controlPanelOption{
+    display: flex;
+    flex-flow: row nowrap;
+    
+    margin-top: 2rem;
+    justify-content: start;
+}
+
+.div-title{
+    flex: 1;
+    text-align: center;
+}
+
+.div-options{
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    gap: 10px;
+    margin-top: 5rem;
+}
+
+.icon-option{
+    color: wheat;
+}
+
+.btn-option{
+    cursor: pointer;
+}
+
+.iconBack{
+    margin-left: 12px;
+    cursor: pointer;
+}

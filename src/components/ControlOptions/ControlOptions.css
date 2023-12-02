@@ -1,0 +1,88 @@
+.divForm{
+    display: flex;
+    flex-flow: column nowrap;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 4rem;
+    background-color: #075a83b0;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.div-input-form{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    margin: 10px 0;
+}
+
+.div-input-form label {
+    width: 100%;
+    margin-bottom: 5px;
+    color: #ffffff;
+    font-weight: bold;
+}
+  
+.div-input-form input {
+    width: 100%;
+}
+
+.btn-create{
+    width: 50%;
+    margin: auto;
+    margin-top: 2rem;
+}
+
+.table-delete{
+    margin: auto;
+    margin-top: 3rem;
+    border-spacing: 30px;
+}
+
+.title-delete{
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.div-prods-update{
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.div-prod-update{
+    display: flex;
+    flex-flow: column nowrap;
+    max-width: 200px;
+    margin: 8px 15px;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.img-update{
+    object-fit: contain;
+}
+
+.btn-edit-prod{
+    border:none;
+    background-color: #5683C8;
+    padding: 6px;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.btn-edit-prod:hover{
+    cursor: pointer;
+}
+
+.btn-delete{
+    border: none;
+    color: red;
+}
+
+.btn-delete:hover{
+    cursor: pointer;
+}
