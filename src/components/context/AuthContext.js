@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect, createContext } from "react";
+import { useLocation } from "react-router-dom";
 
 const userContext = createContext();
 
@@ -15,8 +16,7 @@ const AuthProvider = ({ children }) => {
     const [usuario, setUsuario] = useState(null);
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] =useState(true);
-
-    // console.log(isAuth);
+    const [prevLocation, setPrevLocation] = useState(null);
 
     const login = async (user) => {
         try {
@@ -100,7 +100,7 @@ const AuthProvider = ({ children }) => {
       
 
     return (
-        <userContext.Provider value={{register, login, logout, current, usuario, isAuth }}>
+        <userContext.Provider value={{register, login, logout, current, usuario, prevLocation, setPrevLocation }}>
             {loading? <div>Cargando...</div> : children}
         </userContext.Provider>
     )

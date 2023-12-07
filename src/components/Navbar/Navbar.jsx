@@ -11,17 +11,22 @@ import './Navbar.css';
 
 function Navbar() {
 
-    const { usuario, logout } = useAuth();
+    const { usuario, logout, setPrevLocation } = useAuth();
     const { products, setProducts } = useProd();
 
     const navigation = useNavigate();
     const location = useLocation();
 
+    const goLogin = ()=>{
+        setPrevLocation(location.pathname);
+        navigation('/login');
+    }
+
     const handleLogout = async () => {
         const response = await logout();
         const ubication = location.pathname;
         if (response.status === 'succes') {
-            toast.success(response.message, { position: "top-right", autoClose: 2000, hideProgressBar: true, closeOnClick: false, closeButton: false });
+            toast.success(response.message, { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover:false });
             if (location.pathname === "/controlpanel") navigation("/");
             else navigation(ubication);
         }
@@ -75,7 +80,7 @@ function Navbar() {
                                 </div>
                                 :
                                 <div className='links-nav'>
-                                    <Link to={"/login"} className='link'>Iniciar sesión</Link>
+                                    <button onClick={goLogin} className='buttonlink-login'>Iniciar sesión</button>
                                     <Link to={"/register"} className='link'>Registrarse</Link>
                                 </div>
                             }

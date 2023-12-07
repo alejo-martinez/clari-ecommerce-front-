@@ -1,4 +1,94 @@
 .div-prod-cart{
     display: flex;
+    flex-flow: row nowrap;
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 8px;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.div-cart{
+    display: flex;
+    flex-flow: column wrap;
+    width: 70%;
+    justify-items: center;
+}
+
+.div-resume{
+    display: flex;
+    flex-flow: column nowrap;
+    width: 30%;
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 8px;
+    justify-content: space-around;
+    height: 200px;
+}
+
+.body-cart{
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.span-total{
+    margin-top: 8px;
+}
+
+.div-quantity{
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.input-quantity{
+    display: flex;
+    margin-left: 20px;
+    align-items: center;
+}
+
+.btn-plus{
+    font-size: 70%;
+    margin-left: 8px;
+    border: none;
+    background-color: transparent;
+}
+
+.btn-minus{
+    font-size: 70%;
+    margin-right: 8px;
+    border: none;
+    background-color: transparent;
+}
+
+.btn-minus:hover{
+    cursor: pointer;
+}
+
+.btn-plus:hover{
+    cursor: pointer;
+}
+
+.btn-endpurchase{
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: blue;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+.btn-endpurchase:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 255, 0.493);
+}
+
+.prod-title{
+    width: 145px;
+}
+
+.div-total{
+    display: flex;
     flex-flow: column nowrap;
 }

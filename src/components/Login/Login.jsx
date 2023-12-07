@@ -8,7 +8,7 @@ function Login() {
     const [user, setUser] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
 
-    const {login} = useAuth();
+    const {login, prevLocation} = useAuth();
 
     const navigate = useNavigate();
 
@@ -21,9 +21,10 @@ function Login() {
         try {
             const response = await login(user);
             if(response.status === 'succes'){
-                toast.success(response.message,{position:"top-right", autoClose:2000, hideProgressBar:true, closeOnClick:false, closeButton:false})
+                toast.success(response.message,{position:"top-center", autoClose:1300, hideProgressBar:true, closeOnClick:true, closeButton:true, pauseOnHover:false})
                 setError('');
-                navigate('/');
+                if(prevLocation) navigate(prevLocation);
+                else navigate('/');
             }
             else setError(response.error);
         } catch (error) {

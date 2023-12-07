@@ -32,7 +32,7 @@ function OptionUpdate() {
                         {products.map((prod, index) => {
                             return (
                                 <div key={prod._id} className='div-prod-update'>
-                                    <div className='div-prod-panel'>
+                                    <div className='div-prod-prop'>
                                         <span className='span-prop'>{prod.title}</span>
                                     </div>
 
@@ -40,7 +40,7 @@ function OptionUpdate() {
                                         <img className='img-update' src={prod.imageUrl} height={150} width={150} />
                                     </div>
 
-                                    <div className=''>
+                                    <div className='div-prod-prop'>
                                         <button onClick={()=> handleState(prod._id)} className='btn-edit-prod'>Editar producto</button>
                                     </div>
                                 </div>

@@ -12,6 +12,8 @@ const useCart = ()=>{
 
 const CartProvider = ({children}) =>{
 
+
+
     const getProductsCart = async(id)=>{
         try {
             const response = await fetch(`${apiUrl}/cart/${id}`,{
@@ -33,7 +35,7 @@ const CartProvider = ({children}) =>{
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({idProd: pid, quantity:quantity})
+                body:JSON.stringify({idProd: pid, quantity: quantity})
             });
             const json = await response.json();
             return json;
@@ -42,11 +44,15 @@ const CartProvider = ({children}) =>{
         }
     }
 
-    const removeProd = async(cid, pid)=>{
+    const removeProd = async(cid, pid, quantity)=>{
         try {
             const response = await fetch(`${apiUrl}/cart/${cid}/remove/${pid}`,{
-                method:'DELELTE',
-                credentials:'include'
+                method:'DELETE',
+                credentials:'include',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({quantity: quantity})
             })
             const json = await response.json();
             return json;

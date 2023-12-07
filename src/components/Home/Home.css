@@ -6,7 +6,8 @@
 .div-prod{
     display: flex;
     flex-flow: column nowrap;
-    max-width: 200px;
+    width: 200px;
+    height: 400px;
     background-color: white;
     padding: 8px;
     margin: 5px 5px;
@@ -15,8 +16,12 @@
     align-items: center;
 }
 
+.div-prod *{
+    flex:1;
+}
+
 .div-prod img{
-    object-fit: contain;
+    border-radius: 4px;
 }
 
 .link-item-detail{
@@ -25,4 +30,10 @@
 
 .link-item-detail:hover{
     cursor: pointer;
+}
+
+
+.div-title-prod h2{
+    font-size: 80%;
+    margin-top: 16px;
 }

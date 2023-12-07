@@ -77,3 +77,13 @@
     color: #A53B3B;
     font-weight: bold;
 }
+
+.div-response{
+    width: 100%;
+    text-align: end;
+}
+
+.span-response{
+    /* text-align: center; */
+    margin-right: 12px;
+}

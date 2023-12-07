@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import { useProd } from '../context/ProductContext';
 
@@ -44,12 +44,17 @@ function ProductCategory() {
                 <div className='div-prods-general'>
                     {prods.map((prod, index) => {
                         return (
+                            <Link className='link-item-detail' to={`/itemdetail/${prod._id}`} key={`link${prod._id}`}>
                             <div key={prod._id} className='div-prod'>
+                              <img src={prod.imageUrl} alt="prod" height={150} width={200} />
+                              <div className='div-title-prod'>
                                 <h2>{prod.title}</h2>
-                                <p>{prod.description}</p>
-                                <span>Stock: {prod.stock}</span>
-                                <span>Precio: ${prod.price}</span>
+                              </div>
+                              <p>{prod.description}</p>
+                              <span>Stock: {prod.stock}</span>
+                              <span>Precio: ${prod.price}</span>
                             </div>
+                          </Link>
                         )
                     })}
                 </div>

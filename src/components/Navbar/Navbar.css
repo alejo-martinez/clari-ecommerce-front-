@@ -42,6 +42,20 @@
     
 }
 
+.buttonlink-login{
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+    color: #116586;
+    transition: all 0.4s;
+}
+
+.buttonlink-login:hover{
+    color: #042231;
+    cursor: pointer;
+}
+
 .submenu {
     max-height: 0;
     overflow: hidden;

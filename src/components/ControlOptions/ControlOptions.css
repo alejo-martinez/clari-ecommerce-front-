@@ -56,14 +56,17 @@
 .div-prod-update{
     display: flex;
     flex-flow: column nowrap;
-    max-width: 200px;
-    margin: 8px 15px;
-    margin-top: 2rem;
+    width: 200px;
+    height: 300px;
+    justify-content: space-around;
     align-items: center;
+    /* margin: 8px 15px; */
+    margin-top: 2rem;
+    /* align-items: center; */
 }
 
-.img-update{
-    object-fit: contain;
+.div-prod-update *{
+    flex:1;
 }
 
 .btn-edit-prod{

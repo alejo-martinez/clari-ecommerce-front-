@@ -84,20 +84,20 @@ function OptionAdd() {
                     </select>
                     :
                     category === 'mantas' ?
-                        <select name="subCategory">
+                        <select name="subCategory" onChange={handleChangeProd}>
                             <option value="sillones">Para sillones</option>
                             <option value="mesa">Caminos de mesa</option>
                             <option value="individual">Manteles individuales</option>
                         </select>
                         :
                         category === 'flores' ?
-                            <select name="subCategory">
+                            <select name="subCategory" onChange={handleChangeProd}>
                                 <option value="secas">Secas</option>
                                 <option value="textiles">Textiles</option>
                             </select>
                             :
                             category === 'articulos' ?
-                                <select name="subCategory">
+                                <select name="subCategory" onChange={handleChangeProd}>
                                     <option value="hornillos">Fogoneros</option>
                                     <option value="fuentes">Fuentes para jardines</option>
                                     <option value="figuras">Figuras de india</option>

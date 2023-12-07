@@ -45,8 +45,10 @@ function Home() {
               return (
                 <Link className='link-item-detail' to={`/itemdetail/${prod._id}`} key={`link${prod._id}`}>
                   <div key={prod._id} className='div-prod'>
-                    <h2>{prod.title}</h2>
-                    <img src={prod.imageUrl} alt="prod" height={200} width={200} />
+                    <img src={prod.imageUrl} alt="prod" height={150} width={200} />
+                    <div className='div-title-prod'>
+                      <h2>{prod.title}</h2>
+                    </div>
                     <p>{prod.description}</p>
                     <span>Stock: {prod.stock}</span>
                     <span>Precio: ${prod.price}</span>
