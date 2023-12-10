@@ -1,0 +1,25 @@
+.div-search{
+    width: 600px;
+}
+
+.search-bar-container{
+    position: relative;
+}
+
+.div-search input{
+    width: 100%;
+}
+
+.div-results{
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+}
+
+.ul-results{
+    background-color: white;
+    padding: 4px;
+    width: 600px;
+    max-height: 200px;
+    overflow: auto;
+}

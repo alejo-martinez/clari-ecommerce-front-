@@ -16,13 +16,21 @@ const ProdProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
 
-    const getAllProds = async () => {
+    const getAll = async()=>{
         const response = await fetch(`${apiUrl}/product`, {
+            method:'GET',
+            credentials:'include'
+        });
+        const json = await response.json();
+        return json;
+    }
+
+    const getAllProds = async (page) => {
+        const response = await fetch(`${apiUrl}/product/prods?page=${page}`, {
             method: 'GET',
             credentials: 'include'
         });
         const json = await response.json();
-        // setProducts(json.payload);
         return json;
     }
 
@@ -105,7 +113,7 @@ const ProdProvider = ({ children }) => {
     }, [loading])
     
     return (
-        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd }}>
+        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll }}>
             {children}
         </productContext.Provider>
     )

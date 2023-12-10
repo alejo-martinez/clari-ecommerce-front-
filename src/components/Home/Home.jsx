@@ -1,29 +1,54 @@
 import React, { useEffect, useState } from 'react';
 
-import { useAuth } from '../context/AuthContext';
 import { useProd } from '../context/ProductContext';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import './Home.css';
 
 function Home() {
 
-  const { getAllProds } = useProd();
+  const { getAllProds, getAll } = useProd();
 
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [next, setNext] = useState(false);
+  const [back, setBack] = useState(false);
+  const [totalPages, setTotalPages] = useState(0); 
+
+  const { page } = useParams();
+
+  const renderPages = ()=>{
+    for (let index = 1; index = totalPages; index++) {
+      return(
+        <Link key={`link${index}`}>{index}</Link>
+      )
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await getAllProds();
-      if (response.status === 'succes') {
-        setLoading(false);
-        setProducts(response.payload);
+      if (page) {
+        const response = await getAllProds(page);
+        if(response.status === 'succes'){
+          setLoading(response.payload);
+          if(response.hasNextPage) setNext(true);
+          if(response.hasPreviusPage) setBack(true);
+          setTotalPages(response.totalPages);
+        }
       }
-      if (response.status === 'error') {
-        setLoading(false);
-        setError(response.error);
+      else {
+
+        const response = await getAll();
+        console.log(response);
+        if (response.status === 'succes') {
+          setLoading(false);
+          setProducts(response.payload);
+        }
+        if (response.status === 'error') {
+          setLoading(false);
+          setError(response.error);
+        }
       }
     }
     if (products.length === 0) fetchData();
@@ -56,7 +81,10 @@ function Home() {
                 </Link>
               )
             })}
-
+            <div>
+              Paginas: 
+              {renderPages()}
+            </div>
           </div>
 
       }

@@ -1,10 +1,15 @@
+.body-add h3{
+    text-align: center;
+    margin-top: 3.5rem;
+}
+
 .divForm{
     display: flex;
     flex-flow: column nowrap;
     max-width: 400px;
     margin: auto;
     margin-top: 4rem;
-    background-color: #075a83b0;
+    background-color: #D2B48C;
     padding: 8px;
     border-radius: 10px;
     margin-bottom: 2rem;
@@ -35,6 +40,18 @@
     width: 50%;
     margin: auto;
     margin-top: 2rem;
+    border: none;
+    background-color: #8F9779;
+    color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.4s;
+}
+
+.btn-create:hover{
+    cursor: pointer;
+    background-color: #8f977980;
+
 }
 
 .table-delete{
@@ -60,9 +77,7 @@
     height: 300px;
     justify-content: space-around;
     align-items: center;
-    /* margin: 8px 15px; */
     margin-top: 2rem;
-    /* align-items: center; */
 }
 
 .div-prod-update *{

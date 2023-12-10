@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { faUser, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import SearchBar from '../SearchBar/SearchBar';
 
 import { useAuth } from '../context/AuthContext';
 import { useProd } from '../context/ProductContext';
@@ -13,6 +15,8 @@ function Navbar() {
 
     const { usuario, logout, setPrevLocation } = useAuth();
     const { products, setProducts } = useProd();
+
+    // const [navFixed, setNavFixed] = useState(false);
 
     const navigation = useNavigate();
     const location = useLocation();
@@ -35,12 +39,6 @@ function Navbar() {
         }
     }
 
-    // const handleSearch = ({target:{value}})=>{
-    //     const filtrados = products.filter(prod => prod.title.toLowerCase().includes(value.toLowerCase()))
-    //     setProducts(filtrados);
-    //   } FUNCION SEARCH
-    // console.log(products);
-
     return (
         <>
             <div>
@@ -50,9 +48,9 @@ function Navbar() {
                             <Link to={"/"}><h3 className='home'>Clara</h3></Link>
                             {/* aca va el logo */}
                         </div>
-                        {/* <div className='div-input-search'>
-                            <input type="text" onChange={handleSearch}/>
-                        </div> SEARCH NO FUNCIONA */}
+                        <div >
+                            <SearchBar />
+                        </div> 
                         <div>
                             {usuario ?
                                 <div className='panel-user'>

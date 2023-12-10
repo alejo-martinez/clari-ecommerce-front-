@@ -51,7 +51,14 @@ function ItemDetail() {
                 }, 3000);
             }
             if (resp.status === 'error') {
-                setError(resp.error);
+                if(resp.error == 'Missing data'){
+                    setError('Especifica una cantidad');
+                    setLoadAdd(false);
+                } 
+                else{
+                    setError(resp.error);
+                    setLoadAdd(false);
+                }
             }
         }
     }
@@ -81,7 +88,7 @@ function ItemDetail() {
                 prod ?
                     <div className='div-item-detail'>
                         <div className='div-img'>
-                            <img src={prod.imageUrl} alt="" />
+                            <img src={prod.imageUrl} alt="" width={500} height={500}/>
                         </div>
                         <div className='div-info'>
                             <div className='div-info-props'>

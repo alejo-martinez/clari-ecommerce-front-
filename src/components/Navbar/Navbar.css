@@ -4,7 +4,12 @@
     justify-content: space-evenly;
     background-color: #D2B48C;
     padding: 5px;
+    height: 40px;
     /* transition: all 0.4s; */
+}
+
+.nav-item{
+    
 }
 
 .nav-item span{
@@ -84,6 +89,7 @@
   .nav-item:hover .submenu{
     max-height: 100%;
     opacity: 1;
+    position: absolute;
 }
 
 .nav-item:hover {
