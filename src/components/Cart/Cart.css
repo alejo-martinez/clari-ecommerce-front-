@@ -92,3 +92,21 @@
     display: flex;
     flex-flow: column nowrap;
 }
+
+.div-emptyCart{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.btn-emptyCart{
+    border: none;
+    background-color: #D9846E;
+    color: #fff;
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.btn-emptyCart:hover {
+    cursor: pointer;
+}

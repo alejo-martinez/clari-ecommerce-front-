@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
-
+import { toast } from 'react-toastify';
 import { useCart } from '../context/CartContext';
 
 import PagoComponent from '../PagoComponent/PagoComponent';
@@ -12,7 +12,7 @@ import './Cart.css';
 function Cart() {
   const { cid } = useParams();
 
-  const { getProductsCart, addProduct, removeProd } = useCart();
+  const { getProductsCart, addProduct, removeProd, emptyCart } = useCart();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,18 +20,16 @@ function Cart() {
   const [cantProds, setCantProds] = useState(0);
   const [end, setEnd] = useState(false);
 
-  const navigation = useNavigate();
-
   const increase = async (pid, id) => {
     const resp = await addProduct(cid, pid, 1);
-    if(resp.status === 'succes'){
+    if (resp.status === 'succes') {
       let newArray = [...products];
       let newTotal = total;
       let newTotalProds = cantProds;
       let prod = products.find(prod => prod._id === id);
       console.log(prod);
       prod.quantity += 1;
-      newArray.map(producto => producto._id === id? prod : producto);
+      newArray.map(producto => producto._id === id ? prod : producto);
       newTotal += prod.product.price;
       newTotalProds += 1;
       setTotal(newTotal);
@@ -48,7 +46,7 @@ function Cart() {
       let newTotalProds = cantProds;
       let prod = products.find(prod => prod._id === id);
       prod.quantity -= 1;
-      newArray.map(producto => producto._id === id? prod : producto);
+      newArray.map(producto => producto._id === id ? prod : producto);
       newTotal -= prod.product.price;
       newTotalProds -= 1;
       setTotal(newTotal);
@@ -57,8 +55,16 @@ function Cart() {
     }
   }
 
-  const endPurchase = ()=>{
+  const endPurchase = () => {
     setEnd(true);
+  }
+
+  const vaciarCarrito = async () => {
+    const resp = await emptyCart(cid);
+    if (resp.status === 'succes') {
+      setProducts([]);
+      toast.success(resp.message, { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+    }
   }
 
   useEffect(() => {
@@ -105,21 +111,21 @@ function Cart() {
                     <div className='div-quantity'>
                       <span>Cantidad: </span>
                       <div className='input-quantity'>
-                        {prod.quantity === 1?
-                        ''
-                        : 
-                        <button className='btn-minus' onClick={() => decrease(prod.product._id, prod._id)}>
-                        <FontAwesomeIcon icon={faMinus}  />
-                        </button>
+                        {prod.quantity === 1 ?
+                          ''
+                          :
+                          <button className='btn-minus' onClick={() => decrease(prod.product._id, prod._id)}>
+                            <FontAwesomeIcon icon={faMinus} />
+                          </button>
                         }
                         <span>{prod.quantity}</span>
                         {
-                          prod.quantity === prod.product.stock?
-                          ''
-                          :
-                        <button onClick={() => increase(prod.product._id, prod._id)} className='btn-plus' >
-                        <FontAwesomeIcon icon={faPlus}  />
-                        </button>
+                          prod.quantity === prod.product.stock ?
+                            ''
+                            :
+                            <button onClick={() => increase(prod.product._id, prod._id)} className='btn-plus' >
+                              <FontAwesomeIcon icon={faPlus} />
+                            </button>
                         }
                       </div>
                     </div>
@@ -135,15 +141,17 @@ function Cart() {
                 <span>Productos: {cantProds}</span>
                 <span className='span-total'>Total: ${total}</span>
               </div>
-              {/* <div> */}
-              {end? <PagoComponent /> : <button className='btn-endpurchase' onClick={endPurchase}>Finalizar compra</button>}
-              {/* </div> */}
+              {end ? <PagoComponent /> : <button className='btn-endpurchase' onClick={endPurchase}>Finalizar compra</button>}
             </div>
           </div>
           :
           <p>Todavia no agregaste ningún producto</p>
 
       }
+      {products.length !== 0 && <div className='div-emptyCart'>
+        <button className='btn-emptyCart' onClick={vaciarCarrito}>Vaciar carrito</button>
+      </div>}
+
     </div>
   )
 }

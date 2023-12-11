@@ -1,6 +1,7 @@
 .div-prods-general{
     display: flex;
     flex-flow: row wrap;
+    justify-content: center;
 }
 
 .div-prod{
@@ -10,7 +11,7 @@
     height: 400px;
     background-color: white;
     padding: 8px;
-    margin: 5px 5px;
+    margin: 7px;
     border-radius: 10px;
     justify-items: center;
     align-items: center;
@@ -36,4 +37,8 @@
 .div-title-prod h2{
     font-size: 80%;
     margin-top: 16px;
+}
+
+.div-pages{
+    margin: 12px 0;
 }

@@ -78,7 +78,7 @@ function ItemDetail() {
         };
 
         fetchData();
-    }, [])
+    }, [pid])
 
     return (
         <div className='body-item'>

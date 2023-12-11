@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 
 import { useProd } from '../context/ProductContext';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import './SearchBar.css';
 
 function SearchBar() {
     const { getAll } = useProd();
 
+    const navigate = useNavigate();
+
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showResults, setShowResults] = useState(false);
 
     const handleSearch = (event) => {
         const term = event.target.value.toLowerCase();
@@ -28,7 +31,17 @@ function SearchBar() {
         );
 
         setSearchResults(filteredResults);
+        setShowResults(true);
     };
+
+    const handleBlur = ()=>{
+        setShowResults(false);
+    }
+    
+    const handleClean = ()=>{
+            setSearchResults([]);
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,22 +61,26 @@ function SearchBar() {
 
 
 
-
     return (
         <>
             {loading ? 'Cargando...'
                 :
                 <div className='search-bar-container'>
                     <div className='div-search'>
-                        <input type="text" placeholder="Buscar productos..." value={searchTerm} onChange={handleSearch} />
+                        <input type="text" placeholder="Buscar productos..." value={searchTerm}  onChange={handleSearch} />
                     </div>
-                    <div className='div-results'>
-                        <ul className={searchResults.length === 0 ? '' : 'ul-results'}>
-                            {searchResults.map((prod, index) => (
-                                <li key={prod._id}><Link to={`/itemdetail/${prod._id}`}>{prod.title}</Link></li>
-                            ))}
-                        </ul>
-                    </div>
+                    {showResults && (
+                        <div className='div-results'>
+                            <ul className={searchResults.length === 0 ? '' : 'ul-results'}>
+                                {searchResults.map((prod, index) => (
+                                    <li key={prod._id} onClick={handleClean}>
+                                        <Link to={`/itemdetail/${prod._id}`}>{prod.title}</Link>
+                                    </li>
+                                    
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             }
         </>

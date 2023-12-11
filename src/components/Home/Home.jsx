@@ -18,28 +18,34 @@ function Home() {
 
   const { page } = useParams();
 
-  const renderPages = ()=>{
-    for (let index = 1; index = totalPages; index++) {
-      return(
-        <Link key={`link${index}`}>{index}</Link>
-      )
-    }
-  }
+  const renderPages = () => {
+    const pageLinks = [];
 
+    for (let index = 1; index <= totalPages; index++) {
+      console.log(index);
+      pageLinks.push(
+        <Link key={`link${index}`} to={`/home/${index}`}>{index}</Link>
+      );
+    }
+
+    return pageLinks;
+  }
   useEffect(() => {
     const fetchData = async () => {
       if (page) {
         const response = await getAllProds(page);
+        console.log(response.totalPages);
         if(response.status === 'succes'){
-          setLoading(response.payload);
+          setProducts(response.payload);
           if(response.hasNextPage) setNext(true);
           if(response.hasPreviusPage) setBack(true);
           setTotalPages(response.totalPages);
+          setLoading(false);
         }
       }
       else {
 
-        const response = await getAll();
+        const response = await getAllProds(1);
         console.log(response);
         if (response.status === 'succes') {
           setLoading(false);
@@ -81,13 +87,13 @@ function Home() {
                 </Link>
               )
             })}
-            <div>
-              Paginas: 
-              {renderPages()}
-            </div>
           </div>
 
       }
+            <div className='div-pages'>
+              Paginas: 
+              {renderPages()}
+            </div>
     </>
   )
 }
