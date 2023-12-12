@@ -145,7 +145,7 @@ function Cart() {
             </div>
           </div>
           :
-          <p>Todavia no agregaste ningún producto</p>
+          <p className='no-prods'>Todavia no agregaste ningún producto</p>
 
       }
       {products.length !== 0 && <div className='div-emptyCart'>

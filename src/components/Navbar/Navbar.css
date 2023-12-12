@@ -7,9 +7,16 @@
     height: 40px;
 }
 
+.nav-item{
+    display: flex;
+    flex-flow: column nowrap;
+    width: fit-content;
+}
+
 .nav-item span{
     color: white;
     font-weight: bold;
+    margin: auto;
 }
 
 .nav-sup{
@@ -57,7 +64,9 @@
 }
 
 .submenu {
-    max-height: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    height: fit-content;
     overflow: hidden;
     background-color: #D2B48C;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -65,10 +74,10 @@
     opacity: 0;
     transition: all 0.4s ease;
     border-radius: 4px;
-    margin-top: 3px;
+    /* margin-top: 3px; */
   }
 
-  .submenu-item {
+.submenu-item {
     padding: 8px;
   }
 
@@ -77,15 +86,16 @@
     transition: all 0.4s;
 }
 
-.submenu-item a:hover{
+.submenu-item a:hover{ 
     color: #FFE8D3;
 }
 
-  .nav-item:hover .submenu{
-    max-height: 100%;
+.nav-item:hover .submenu{
     opacity: 1;
-    position: absolute;
+    overflow: visible;
+    z-index: 1;
 }
+
 
 .panel-user{
     background-color: #D2B48C;
@@ -113,8 +123,21 @@
     margin: 4px 0;
     border: none;
     background-color: #D9846E;
-    cursor: pointer;
     color: #fff;
     padding: 3px;
     border-radius: 3px;
+    transition: all 0.4s;
+}
+
+.btn-logout:hover{
+    cursor: pointer;
+    background-color: #d9836e7c;
+}
+
+.btn-user:hover{
+    color: #1165865d;
+}
+
+.link-panel:hover{
+    color: #1165865d;
 }

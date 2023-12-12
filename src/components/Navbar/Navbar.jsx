@@ -48,7 +48,7 @@ function Navbar() {
                             <Link to={"/"}><h3 className='home'>Clara</h3></Link>
                             {/* aca va el logo */}
                         </div>
-                        <div >
+                        <div>
                             <SearchBar />
                         </div> 
                         <div>
@@ -57,11 +57,11 @@ function Navbar() {
                                     <div className='panel-user-true'>
                                         <div className='panel-user-true-links'>
                                             <Link to={"/profile"}>
-                                                <FontAwesomeIcon icon={faUser} />
+                                                <FontAwesomeIcon icon={faUser} className='btn-user'/>
                                             </Link>
                                             {usuario.rol === 'client' ?
                                                 <Link to={`/cart/${usuario.cart}`}>
-                                                    <FontAwesomeIcon icon={faCartShopping} />
+                                                    <FontAwesomeIcon icon={faCartShopping} className='link-panel'/>
                                                 </Link>
                                                 :
                                                 ''

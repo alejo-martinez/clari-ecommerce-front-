@@ -18,44 +18,39 @@ function ItemDetail() {
     const [loading, setLoading] = useState(true);
     const [prod, setProd] = useState(null);
     const [error, setError] = useState(null);
-    const [addProd, setAddProd] = useState({ idProd: '', quantity: 0 });
+    const [addProd, setAddProd] = useState({ idProd: pid, quantity: 0 });
     const [loadAdd, setLoadAdd] = useState(false);
 
     const navigation = useNavigate();
     const location = useLocation();
 
     const handleAddProd = ({ target: { value } }) => {
-        if (addProd.idProd === '') {
-            setAddProd({ idProd: prod._id, quantity: parseFloat(value) });
-        } else {
-            setAddProd({ ...addProd, quantity: parseFloat(value) });
-        }
+        setAddProd({ ...addProd, quantity: parseFloat(value) });
     }
 
     const handleAdd = async () => {
-        if (!usuario){
+        if (!usuario) {
             setPrevLocation(location.pathname);
             navigation('/login');
-        } 
+        }
         else {
             setLoadAdd('loading');
-            setAddProd({...addProd, quantity: parseFloat(addProd.quantity)});
+            setAddProd({ ...addProd, quantity: parseFloat(addProd.quantity) });
             const resp = await addProduct(usuario.cart, addProd.idProd, addProd.quantity);
-            console.log(resp);
             if (resp.status === 'succes') {
                 if (error) setError(null);
                 setAddProd({ idProd: '', quantity: 0 });
                 setLoadAdd('succes');
-                setTimeout(()=>{
+                setTimeout(() => {
                     setLoadAdd(false);
                 }, 3000);
             }
             if (resp.status === 'error') {
-                if(resp.error == 'Missing data'){
+                if (resp.error == 'Missing data') {
                     setError('Especifica una cantidad');
                     setLoadAdd(false);
-                } 
-                else{
+                }
+                else {
                     setError(resp.error);
                     setLoadAdd(false);
                 }
@@ -88,7 +83,7 @@ function ItemDetail() {
                 prod ?
                     <div className='div-item-detail'>
                         <div className='div-img'>
-                            <img src={prod.imageUrl} alt="" width={500} height={500}/>
+                            <img src={prod.imageUrl} alt="" width={500} height={500} />
                         </div>
                         <div className='div-info'>
                             <div className='div-info-props'>
@@ -99,17 +94,17 @@ function ItemDetail() {
                                 <div className='item-prop'>
                                     <span className='span-stock'>Stock: {prod.stock}</span>
                                     <label>Cantidad:</label>
-                                    <input type="number" onChange={handleAddProd} />
+                                    <input type="number" onChange={handleAddProd} value={addProd.quantity}/>
                                 </div>
                             </div>
                             <div className='div-btn-add-prod'>
+                                <div className='div-response'>
+                                    <span className='span-response'>
+                                        {loadAdd === 'succes' ? 'Agregado al carrito!' : loadAdd === 'loading' ? 'Cargando...' : ''}
+                                    </span>
+                                </div>
                                 <button className='btn-add-prod' onClick={handleAdd}>Agregar al carrito</button>
                                 <span className='error-add'>{error && `${error}`}</span>
-                            <div className='div-response'>
-                                <span className='span-response'>
-                                {loadAdd === 'succes'? 'Agregado al carrito!' : loadAdd === 'loading'? 'Cargando...' : ''}
-                                </span>
-                            </div>
                             </div>
                         </div>
                     </div>
