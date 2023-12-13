@@ -45,8 +45,9 @@ function Navbar() {
                 <div>
                     <div className='nav-sup'>
                         <div>
-                            <Link to={"/"}><h3 className='home'>Clara</h3></Link>
-                            {/* aca va el logo */}
+                            <Link to={"/"}>
+                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/logoclari2.jpg" alt="" width={150} height={94}/>
+                            </Link>
                         </div>
                         <div>
                             <SearchBar />

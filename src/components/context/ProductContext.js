@@ -17,7 +17,7 @@ const ProdProvider = ({ children }) => {
 
 
     const getAll = async()=>{
-        const response = await fetch(`${apiUrl}/product`, {
+        const response = await fetch(`${apiUrl}/product/`, {
             method:'GET',
             credentials:'include'
         });
@@ -83,10 +83,23 @@ const ProdProvider = ({ children }) => {
         return json;
     }
 
+    const updateImage = async(id, file)=>{
+        const formData = new FormData();
+        formData.append('file', file)
+        
+        const response = await fetch(`${apiUrl}/product/image/${id}`,{
+            method:'PUT',
+            credentials:'include',
+            body:formData
+        });
+        const json = await response.json();
+        return json;
+    }
+
     const deleteProduct = async(id)=>{
         const response = await fetch(`${apiUrl}/product/${id}`,{
             method:'DELETE',
-            credentials:'include'
+            credentials:'include',
         });
         const json = await response.json();
         return json;
@@ -113,7 +126,7 @@ const ProdProvider = ({ children }) => {
     }, [loading])
     
     return (
-        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll }}>
+        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage }}>
             {children}
         </productContext.Provider>
     )

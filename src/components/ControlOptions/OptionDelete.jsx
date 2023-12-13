@@ -6,9 +6,11 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import {toast} from 'react-toastify';
 
 function OptionDelete() {
-    const {deleteProduct, products, setProducts} = useProd();
+    const {deleteProduct, getAll} = useProd();
 
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [products, setProducts] = useState([]);
     
 
     const handleRemove = async(id)=>{
@@ -26,8 +28,25 @@ function OptionDelete() {
         }
     }
 
+    useEffect(()=>{
+        const fetchData = async()=>{
+            const resp = await getAll();
+            if(resp.status === 'succes'){
+                setProducts(resp.payload);
+                setLoading(false);
+            }
+        }
+
+        fetchData()
+    }, [])
+
   return (
     <div>
+        {loading?
+        <p>Cargando...</p>
+        :
+            <div>
+
         <h3 className='title-delete'>Borrar productos</h3>
         <div>
             <table className='table-delete'>
@@ -45,7 +64,7 @@ function OptionDelete() {
                 <tr key={prod._id}>
                     <td>{prod._id}</td>
                     <td>{prod.title}</td>
-                    <td><a href={prod.imageUrl} target='_blank' rel='noopener noreferrer'>Ver imagen</a></td>
+                    <td><img src={prod.imageUrl} alt="" width={75} height={75}/></td>
                     <td><button className='btn-delete' onClick={()=> handleRemove(prod._id)}><FontAwesomeIcon icon={faTrashCan} /></button></td>
                 </tr>
                     )
@@ -53,6 +72,8 @@ function OptionDelete() {
                 </tbody>
                 </table>
         </div>
+                </div>
+}
     </div>
   )
 }

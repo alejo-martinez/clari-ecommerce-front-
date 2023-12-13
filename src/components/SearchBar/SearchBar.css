@@ -1,5 +1,6 @@
 .div-search{
     width: 600px;
+    height: 26px;
 }
 
 .search-bar-container{
@@ -8,6 +9,7 @@
 
 .div-search input{
     width: 100%;
+    height: 100%;
 }
 
 .div-results{

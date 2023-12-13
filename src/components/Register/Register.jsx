@@ -57,7 +57,7 @@ function Register() {
             <input type="password" name="password" onChange={handleChange} />
           </div>
           <div>
-            <button onClick={handleRegister}>Registrarse</button>
+            <button onClick={handleRegister} className='btn-login'>Registrarse</button>
           </div>
         </div>
         <p className='error'>{error && `${error}`}</p>

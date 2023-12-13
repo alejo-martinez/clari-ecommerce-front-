@@ -34,6 +34,7 @@
   
 .div-input-form input {
     width: 100%;
+    height: 23px;
 }
 
 .btn-create{
@@ -58,6 +59,7 @@
     margin: auto;
     margin-top: 3rem;
     border-spacing: 30px;
+    width: 70%;
 }
 
 .title-delete{

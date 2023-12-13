@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import './ProdEdit.css';
 
 function ProdEdit(prop) {
-    const { getById, updateProd } = useProd();
+    const { getById, updateProd, updateImage } = useProd();
     const { pid, fnBack } = prop;
 
     const [edit, setEdit] = useState('');
@@ -29,8 +29,25 @@ function ProdEdit(prop) {
         }
     }
 
+    const handleImageUpdate = async()=>{
+        const resp = await updateImage(pid, valueProd.value);
+        if (resp.status === 'succes') {
+            setProducto({ ...producto, [valueProd.field]: valueProd.value });
+            toast.success(resp.message, { position: "top-right", autoClose: 2000, hideProgressBar: true, closeOnClick: false, closeButton: false });
+            setValueProd({ field: '', value: '' });
+            setEdit('');
+        }
+        if (resp.status === 'error') {
+            toast.error(resp.error, { position: "top-right", autoClose: 5000, hideProgressBar: true, closeOnClick: true, pauseOnHover: true });
+        }
+    }
+
     const handleChange = ({ target: { name, value } }) => {
         setValueProd({ ...valueProd, 'value': value, 'field': name });
+    }
+
+    const handleImg = (e) => {
+        setValueProd({ valueProd, ['value']: e.target.files[0] })
     }
 
     useEffect(() => {
@@ -88,10 +105,10 @@ function ProdEdit(prop) {
                             {
                                 edit === `img${producto._id}` ?
                                     <div className='div-input-update'>
-                                        <input type="file" name='file' />
+                                        <input type="file" name='file' onChange={handleImg}/>
                                         <div className='btns-update'>
                                             <FontAwesomeIcon onClick={() => setEdit('')} icon={faXmark} className='btn-cancel' />
-                                            <FontAwesomeIcon onClick={() => handleUpdate()} icon={faCheck} className='btn-update' />
+                                            <FontAwesomeIcon onClick={() => handleImageUpdate()} icon={faCheck} className='btn-update' />
                                         </div>
                                     </div>
                                     :

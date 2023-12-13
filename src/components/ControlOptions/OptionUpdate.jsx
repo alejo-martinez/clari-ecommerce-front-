@@ -6,10 +6,12 @@ import { Link } from 'react-router-dom';
 import ProdEdit from '../ProdEdit/ProdEdit';
 
 function OptionUpdate() {
-    const { products, setProducts } = useProd();
+    const {  setProducts, getAll } = useProd();
 
     const [editProd, setEditProd] = useState(false);
     const [pid, setPid] = useState('');
+    const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const handleState = (id)=>{
         if(editProd){
@@ -21,15 +23,34 @@ function OptionUpdate() {
         }
     }
 
+    useEffect(()=>{
+        const fetchData = async()=>{
+            try {
+                const resp = await getAll();
+                if(resp.status === 'succes'){
+                    setProductos(resp.payload);
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchData();
+    }, []);
+
     return (
         <div>
-            {editProd ?
+            {loading?
+            <p>Cargando...</p>
+            : 
+            editProd ?
                 <ProdEdit pid={pid} fnBack={handleState}/>
                 :
                 <div>
                     <h3 className='title-update-option'>Actualizar productos</h3>
                     <div className='div-prods-update'>
-                        {products.map((prod, index) => {
+                        {productos.map((prod, index) => {
                             return (
                                 <div key={prod._id} className='div-prod-update'>
                                     <div className='div-prod-prop'>

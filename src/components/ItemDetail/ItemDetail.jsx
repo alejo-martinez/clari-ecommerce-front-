@@ -20,13 +20,27 @@ function ItemDetail() {
     const [error, setError] = useState(null);
     const [addProd, setAddProd] = useState({ idProd: pid, quantity: 0 });
     const [loadAdd, setLoadAdd] = useState(false);
+    const [quantity, setQuantity] = useState(0);
 
     const navigation = useNavigate();
     const location = useLocation();
 
-    const handleAddProd = ({ target: { value } }) => {
-        setAddProd({ ...addProd, quantity: parseFloat(value) });
+    // const handleAddProd = ({ target: { value } }) => {
+    //     setAddProd({ ...addProd, quantity: parseFloat(value) });
+    // }
+
+    const handleQuantity = (e) => {
+        const inputValue = e.target.value.replace(/[^0-9]/g, '');
+        setQuantity(inputValue === '' ? 0 : parseInt(inputValue, 10));
     }
+
+    const handleIncrement = () => {
+        setQuantity(prevValue => (prevValue === prod.stock ? prevValue : prevValue + 1));
+      };
+    
+      const handleDecrement = () => {
+        setQuantity(prevValue => (prevValue > 0 ? prevValue - 1 : 0));
+      };
 
     const handleAdd = async () => {
         if (!usuario) {
@@ -35,7 +49,7 @@ function ItemDetail() {
         }
         else {
             setLoadAdd('loading');
-            setAddProd({ ...addProd, quantity: parseFloat(addProd.quantity) });
+            setAddProd({ ...addProd, quantity: parseFloat(quantity) });
             const resp = await addProduct(usuario.cart, addProd.idProd, addProd.quantity);
             if (resp.status === 'succes') {
                 if (error) setError(null);
@@ -46,7 +60,7 @@ function ItemDetail() {
                 }, 3000);
             }
             if (resp.status === 'error') {
-                if (resp.error == 'Missing data') {
+                if (resp.error === 'Missing data') {
                     setError('Especifica una cantidad');
                     setLoadAdd(false);
                 }
@@ -94,7 +108,11 @@ function ItemDetail() {
                                 <div className='item-prop'>
                                     <span className='span-stock'>Stock: {prod.stock}</span>
                                     <label>Cantidad:</label>
-                                    <input type="number" onChange={handleAddProd} value={addProd.quantity}/>
+                                    <div>
+                                        <button onClick={handleDecrement}>less</button>
+                                        <input type="text" onChange={handleQuantity} value={quantity} />
+                                        <button onClick={handleIncrement}>add</button>
+                                    </div>
                                 </div>
                             </div>
                             <div className='div-btn-add-prod'>

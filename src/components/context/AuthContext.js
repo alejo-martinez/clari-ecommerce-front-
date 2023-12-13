@@ -96,7 +96,7 @@ const AuthProvider = ({ children }) => {
                 }
         }
         if(!isAuth && !usuario) fetchData();
-      }, [])
+      }, [usuario])
       
 
     return (
