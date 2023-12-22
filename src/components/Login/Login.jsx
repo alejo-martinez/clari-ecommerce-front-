@@ -6,9 +6,9 @@ import {toast} from 'react-toastify';
 
 function Login() {
     const [user, setUser] = useState({ email: '', password: '' });
-    const [error, setError] = useState('');
+    const [error, setError] = useState(null);
 
-    const {login, prevLocation} = useAuth();
+    const {login, prevLocation, setUsuario, setIsAuth} = useAuth();
 
     const navigate = useNavigate();
 
@@ -18,18 +18,22 @@ function Login() {
     }
 
     const handleLogin = async()=>{
-        try {
             const response = await login(user);
+            console.log(response);
             if(response.status === 'succes'){
-                toast.success(response.message,{position:"top-center", autoClose:1300, hideProgressBar:true, closeOnClick:true, closeButton:true, pauseOnHover:false})
+                setUsuario(response.payload);
+                setIsAuth(true);
+                toast.success(response.message,{position:"top-center", autoClose:1300, hideProgressBar:true, closeOnClick:true, closeButton:true, pauseOnHover:false});
                 setError('');
                 if(prevLocation) navigate(prevLocation);
                 else navigate('/');
             }
-            else setError(response.error);
-        } catch (error) {
-            setError(error);
-        }
+            if(response.status === 'error'){
+                setUsuario(null);
+                setIsAuth(false);
+                setError(response.error);
+            }
+            
     }
 
     return (

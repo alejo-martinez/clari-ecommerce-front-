@@ -1,6 +1,12 @@
 .div-search{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
     width: 600px;
     height: 26px;
+    /* padding: 10px; */
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .search-bar-container{
@@ -8,8 +14,12 @@
 }
 
 .div-search input{
-    width: 100%;
+    width: 95%;
     height: 100%;
+    border: none;
+    margin: 4px;
+    border-radius: 10px;
+    outline: none;
 }
 
 .div-results{
@@ -24,9 +34,19 @@
     width: 600px;
     max-height: 200px;
     overflow: auto;
+    border-radius: 10px 10px 0 0;
 }
 
 .ul-results li{
     width: 100%;
     margin-top: 4px;
+}
+
+.prod-result{
+    color: black;
+    transition: all 0.4s;
+}
+
+.prod-result:hover{
+    color: #555555;
 }

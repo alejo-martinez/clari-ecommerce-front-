@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 
 import { useProd } from '../context/ProductContext';
@@ -12,6 +12,12 @@ function OptionAdd() {
     const [error, setError] = useState(null);
 
     const { createProd } = useProd();
+
+    const fileRef = useRef(null);
+
+    const resetFile = ()=>{
+        if(fileRef.current) fileRef.current.value = '';
+    }
 
     const handleChange = ({ target: { value } }) => {
         setCategory(value);
@@ -32,6 +38,8 @@ function OptionAdd() {
             if (resp.status === 'succes') {
                 toast.success(resp.message, { position: "top-right", autoClose: 2000, hideProgressBar: true, closeOnClick: false, closeButton: false });
                 setProducto({ title: '', description: '', price: '', file: '', stock: '', category: '', subCategory: '' });
+                setCategory('');
+                resetFile();
             }
             if (resp.status === 'error') setError(resp.error);
         } catch (error) {
@@ -60,7 +68,7 @@ function OptionAdd() {
                     </div>
                     <div className='div-input-form'>
                         <label>Imagen</label>
-                        <input type="file" name='file' onChange={handleImg} />
+                        <input type="file" name='file' ref={fileRef} onChange={handleImg} />
                     </div>
                     <div className='div-input-form'>
                         <label>Stock</label>

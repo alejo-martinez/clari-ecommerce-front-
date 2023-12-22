@@ -20,19 +20,25 @@
 
 .div-options{
     margin-top: 10px;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 50% 50%;
-    gap: 10px;
+    display: flex;
+    flex-flow: column nowrap;
     margin-top: 5rem;
 }
 
-.icon-option{
-    color: wheat;
-}
 
 .btn-option{
+    border: none;
+    color: #fff;
+    background-color: #001F3F;
+    transition: all 0.4s;
+    margin: 12px 0;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.btn-option:hover{
     cursor: pointer;
+    background-color: #001f3f85;
 }
 
 .iconBack{

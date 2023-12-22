@@ -1,4 +1,4 @@
-.div-content-forms{
+.div-content-forms{  /* Estilos para los divs de los formularios de login y registro */
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -12,11 +12,11 @@
     border-radius: 6px;
 }
 
-.div-content-forms h2{
+.div-content-forms h2{  /* Título de los formularios de login y registro */
     color: #fff;
 }
 
-.div-form{
+.div-form{  /* Estilos de los formularios de login y registro */
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -24,7 +24,7 @@
     margin-top: 20px;
 }
 
-.div-input{
+.div-input{ /* Estilos de los divs que contiene los inputs y label de login y registro */
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
@@ -35,29 +35,30 @@
     margin-bottom: 12px;
 }
 
-.div-input input{
+.div-input input{ /* Seleccion de los inputs dentro de los divs de login y registro */
     width: 65%;
     height: 21px;
     border-radius: 4px;
     border: none;
+    outline: none;
 }
 
-.div-input label{
+.div-input label{ /* Seleccion de los label dentro de los divs de login y registro */ 
     width: 35%;
     color: #fff;
 }
 
-.error {
+.error { /* Estilos del span que muestra errores al enviar formularios */
     color: #A53B3B;
     font-weight: bold;
 }
 
-.no-prods{
+.no-prods{ /* Texto que se muestra al no renderizar ningun producto (no hay) */
     text-align: center;
     margin-top: 20px;
 }
 
-.btn-login{
+.btn-login{ /* Estilos para el boton de login y registro */ 
     border: none;
     background-color: #8F9779;
     color: #fff;
@@ -66,11 +67,7 @@
     transition: all 0.4s;
 }
 
-.btn-login:hover{
+.btn-login:hover{ /* Estilos al hacer hover en boton de login y registro */
     cursor: pointer;
     background-color: #8f97798f;
-}
-
-.btn-login:hover{
-    cursor: pointer;
 }

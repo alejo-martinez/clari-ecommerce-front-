@@ -35,6 +35,7 @@
 .div-input-form input {
     width: 100%;
     height: 23px;
+    outline: none;
 }
 
 .btn-create{
@@ -70,16 +71,26 @@
 .div-prods-update{
     display: flex;
     flex-flow: row wrap;
+    justify-content: center;
+    margin-top: 4rem;
+
 }
 
 .div-prod-update{
     display: flex;
     flex-flow: column nowrap;
+    
     width: 200px;
     height: 300px;
     justify-content: space-around;
     align-items: center;
-    margin-top: 2rem;
+    margin: 10px;
+    background-color: #D2B48C;
+    border-radius: 6px;
+}
+
+.div-prod-prop{
+    display: flex;
 }
 
 .div-prod-update *{
@@ -88,21 +99,26 @@
 
 .btn-edit-prod{
     border:none;
-    background-color: #5683C8;
+    background-color: #0a3f53;
     padding: 6px;
     border-radius: 8px;
     color: #fff;
+    margin: auto;
+    transition: all 0.4s;
 }
 
 .btn-edit-prod:hover{
     cursor: pointer;
+    background-color: #0a3f538a;
 }
 
 .btn-delete{
     border: none;
-    color: red;
+    color: rgb(148, 9, 9);
+    transition: all 0.4s;
 }
 
 .btn-delete:hover{
     cursor: pointer;
+    color: rgba(148, 9, 9, 0.384);
 }

@@ -29,8 +29,8 @@ const AuthProvider = ({ children }) => {
                 credentials:'include'
             });
             const json = await response.json();
-            setUsuario(json.payload);
-            setIsAuth(true);
+            // setUsuario(json.payload);
+            // setIsAuth(true);
             return json;
         } catch (error) {
             return error;
@@ -77,6 +77,7 @@ const AuthProvider = ({ children }) => {
             const json = await response.json();
             return json;
         } catch (error) {
+            console.log(error);
             return error;
         }
     }
@@ -84,12 +85,21 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async()=>{
                 const response = await current();
+                // console.log(response.status === 'error');
                 if(response.status === 'succes'){
-                    setUsuario(response.payload);
-                    setIsAuth(true);
-                    setLoading(false);
+                    // if(response.payload){
+                        setUsuario(response.payload);
+                        setIsAuth(true);
+                        setLoading(false);
+                    // }
+                    // else{
+                    //     setIsAuth(false);
+                    //     setUsuario(null);
+                    //     setLoading(false);
+                    // }
                 } 
                 if(response.status === 'error'){
+                    console.log(response.error);
                     setUsuario(null);
                     setIsAuth(false);
                     setLoading(false);
@@ -100,7 +110,7 @@ const AuthProvider = ({ children }) => {
       
 
     return (
-        <userContext.Provider value={{register, login, logout, current, usuario, prevLocation, setPrevLocation }}>
+        <userContext.Provider value={{register, login, logout, current, usuario, prevLocation, setPrevLocation, setUsuario, setIsAuth }}>
             {loading? <div>Cargando...</div> : children}
         </userContext.Provider>
     )

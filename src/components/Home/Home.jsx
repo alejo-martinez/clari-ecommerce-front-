@@ -20,11 +20,13 @@ function Home() {
   // const [pages, setPages] = useState(0);
 
   const handleNextPage = () => {
+    setLoading(true);
     const newPage = Number(currentPage) + 1;
     setCurrentPage(newPage);
   }
 
   const handleBackPage = () => {
+    setLoading(true);
     const newPage = Number(currentPage) - 1;
     setCurrentPage(newPage)
   }

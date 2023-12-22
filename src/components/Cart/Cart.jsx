@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+
+//Librerias extras
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
+
+//Context del carrito
 import { useCart } from '../context/CartContext';
 
+//Componente de pago
 import PagoComponent from '../PagoComponent/PagoComponent';
 
 import './Cart.css';
 
 function Cart() {
-  const { cid } = useParams();
+  const { cid } = useParams(); //Id del carrito llegado por parámetro de la ruta
 
-  const { getProductsCart, addProduct, removeProd, emptyCart } = useCart();
+  const { getProductsCart, addProduct, removeProd, emptyCart } = useCart(); //Funciones del contextodel carrito
 
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [total, setTotal] = useState(0);
-  const [cantProds, setCantProds] = useState(0);
-  const [end, setEnd] = useState(false);
+  const [products, setProducts] = useState([]); // Estado de los productos dentro del carrito
+  const [loading, setLoading] = useState(true); // Estado loading para permitir la carga de datos antes de renderizar contenido
+  const [total, setTotal] = useState(0); // Estado del monto total de dinero a pagar
+  const [cantProds, setCantProds] = useState(0); // Estado de la cantidad de productos totales a comprar
+  const [end, setEnd] = useState(false); // Estado que determina el renderizado del componente de pago
 
-  const increase = async (pid, id) => {
-    const resp = await addProduct(cid, pid, 1);
-    if (resp.status === 'succes') {
-      let newArray = [...products];
+  const increase = async (pid, id) => { // Función para incrementar la cantidad de un producto. Al estar dentro 
+    const body = {idProd: pid, quantity:1} // del componente "carrito" solo incrementa los productos que ya estén 
+    const resp = await addProduct(cid, body); // dentro del mismo. El límite del agregado depende del stock del 
+    if (resp.status === 'succes') { // producto.
+      let newArray = [...products]; 
       let newTotal = total;
       let newTotalProds = cantProds;
       let prod = products.find(prod => prod._id === id);
-      console.log(prod);
       prod.quantity += 1;
       newArray.map(producto => producto._id === id ? prod : producto);
       newTotal += prod.product.price;
@@ -38,10 +43,10 @@ function Cart() {
     }
   }
 
-  const decrease = async (pid, id) => {
-    const resp = await removeProd(cid, pid, 1);
-    if (resp.status === 'succes') {
-      let newArray = [...products];
+  const decrease = async (pid, id) => { // Función para decrementar la cantidad de un producto. Al estar dentro
+    const resp = await removeProd(cid, pid, 1); // del componente "carrito" solo decrementa los productos que ya
+    if (resp.status === 'succes') { // estén dentro del mismo. El límite de decremento es cuando existe una 
+      let newArray = [...products]; // cantidad de 1 (uno) producto dentro del carrito.
       let newTotal = total;
       let newTotalProds = cantProds;
       let prod = products.find(prod => prod._id === id);
@@ -55,11 +60,11 @@ function Cart() {
     }
   }
 
-  const endPurchase = () => {
+  const endPurchase = () => { // Función para renderizar la vista del componente de pago.
     setEnd(true);
   }
 
-  const vaciarCarrito = async () => {
+  const vaciarCarrito = async () => { // Función que vacía el carrito.
     const resp = await emptyCart(cid);
     if (resp.status === 'succes') {
       setProducts([]);
@@ -67,8 +72,8 @@ function Cart() {
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
+  useEffect(() => { // useEffect para renderizar los componentes del carrito del usuario logueado y determinar
+    const fetchData = async () => { // el precio y la cantidad total de productos.
       const resp = await getProductsCart(cid);
       if (resp.status === 'succes') {
         const prods = resp.payload.products;
@@ -91,7 +96,7 @@ function Cart() {
       }
     }
 
-    fetchData();
+    fetchData(); // Llamado a la función del useEffect.
   }, [])
 
 
@@ -100,31 +105,31 @@ function Cart() {
       {loading ?
         <p>Cargando...</p>
         :
-        products.length !== 0 ?
-          <div className='body-cart'>
-            <div className='div-cart'>
+        products.length !== 0 ? 
+        <div className='body-cart'> {/* Div donde se muestran los productos y la info de pago. */}
+            <div className='div-cart'> {/* div con los productos agregados al carrito */}
               {products.map((prod, index) => {
                 return (
-                  <div key={prod.product._id} className='div-prod-cart'>
+                  <div key={prod.product._id} className='div-prod-cart'> {/* div de cada producto */}
                     <img src={prod.product.imageUrl} alt="" width={65} height={65} />
-                    <span className='prod-title'>{prod.product.title}</span>
-                    <div className='div-quantity'>
+                    <span className='prod-title'><Link to={`/itemdetail/${prod.product._id}`}>{prod.product.title}</Link></span>
+                    <div className='div-quantity'> {/* div para manejar la cantidad de producto */}
                       <span>Cantidad: </span>
                       <div className='input-quantity'>
-                        {prod.quantity === 1 ?
+                        {prod.quantity === 1 ? /* si hay un solo producto no muestra el boton de decremento*/
                           ''
                           :
                           <button className='btn-minus' onClick={() => decrease(prod.product._id, prod._id)}>
-                            <FontAwesomeIcon icon={faMinus} />
+                            <FontAwesomeIcon icon={faMinus} /> {/* boton de decremento */}
                           </button>
                         }
-                        <span>{prod.quantity}</span>
+                        <span>{prod.quantity}</span> {/* cantidad de producto */}
                         {
-                          prod.quantity === prod.product.stock ?
+                          prod.quantity === prod.product.stock ? /* Si la cantidad es la misma que el stock no renderiza el botón de aumento */
                             ''
                             :
                             <button onClick={() => increase(prod.product._id, prod._id)} className='btn-plus' >
-                              <FontAwesomeIcon icon={faPlus} />
+                              <FontAwesomeIcon icon={faPlus} /> {/* Botón de aumento */}
                             </button>
                         }
                       </div>
@@ -135,25 +140,25 @@ function Cart() {
                 )
               })}
             </div>
-            <div className='div-resume'>
+            <div className='div-resume'> {/* Div con el resumen de la compra */}
               <h4>Resumen de compra</h4>
-              <div className='div-total'>
+              <div className='div-total'> 
                 <span>Productos: {cantProds}</span>
                 <span className='span-total'>Total: ${total}</span>
               </div>
-              {end ? <PagoComponent /> : <button className='btn-endpurchase' onClick={endPurchase}>Finalizar compra</button>}
+              {end ? <PagoComponent /> : <button className='btn-endpurchase' onClick={endPurchase}>Finalizar compra</button>} {/* Boton que renderiza el componente de pago */}
             </div>
           </div>
           :
-          <p className='no-prods'>Todavia no agregaste ningún producto</p>
+          <p className='no-prods'>Todavia no agregaste ningún producto</p> /* Si no hay productos en el carrito renderiza el texto */
 
       }
-      {products.length !== 0 && <div className='div-emptyCart'>
-        <button className='btn-emptyCart' onClick={vaciarCarrito}>Vaciar carrito</button>
+      {products.length !== 0 && <div className='div-emptyCart'> {/* Si hay productos renderiza el boton para vaciar el carrito */}
+        <button className='btn-emptyCart' onClick={vaciarCarrito}>Vaciar carrito</button> {/* Botón para vaciar el carrito */}
       </div>}
 
     </div>
   )
 }
 
-export default Cart
+export default Cart;

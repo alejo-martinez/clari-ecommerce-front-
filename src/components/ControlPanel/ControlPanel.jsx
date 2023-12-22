@@ -25,18 +25,21 @@ function ControlPanel() {
                     <div className='div-controlPanel'>
                         <h2>Panel de control</h2>
                         <div className='div-options'>
-                            <FontAwesomeIcon title='Crear producto' icon={faPlus} size='2x' onClick={() => handleOption('create')} className='btn-option' />
+                            <button onClick={() => handleOption('create')} className='btn-option'>Crear productos</button>
+                            <button onClick={() => handleOption('update')} className='btn-option'>Actualizar productos</button>
+                            <button onClick={() => handleOption('delete')} className='btn-option'>Borrar productos</button>
+                            {/* <FontAwesomeIcon title='Crear producto' icon={faPlus} size='2x' onClick={() => handleOption('create')} className='btn-option' />
                             <FontAwesomeIcon title='Actualizar producto' icon={faFilePen} size='2x' onClick={() => handleOption('update')} className='btn-option' />
-                            <FontAwesomeIcon title='Borrar producto' icon={faBan} size='2x' onClick={() => handleOption('delete')} className='btn-option' />
+                            <FontAwesomeIcon title='Borrar producto' icon={faBan} size='2x' onClick={() => handleOption('delete')} className='btn-option' /> */}
                         </div>
                     </div>
                     :
                     <div className='div-controlPanelOption'>
                         <div>
-                        <FontAwesomeIcon icon={faArrowLeft} size='2x' onClick={() => handleOption(null)} className='iconBack'/>
+                            <FontAwesomeIcon icon={faArrowLeft} size='2x' onClick={() => handleOption(null)} className='iconBack' />
                         </div>
                         <div className='div-title'>
-                        <h2>Panel de control</h2>
+                            <h2>Panel de control</h2>
                         </div>
                     </div>
                 }

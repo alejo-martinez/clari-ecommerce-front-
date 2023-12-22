@@ -3,9 +3,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext';
 
-function AuthRoute() {
+function LoguedRoute() {
     const {usuario} = useAuth();
-  return  usuario? <Navigate to={"/"}/> : <Outlet /> ;
+  return  usuario? <Outlet /> : <Navigate to={"/"}/> ;
 }
 
-export default AuthRoute
+export default LoguedRoute;

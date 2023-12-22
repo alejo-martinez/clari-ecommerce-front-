@@ -16,8 +16,6 @@ function Navbar() {
     const { usuario, logout, setPrevLocation } = useAuth();
     const { products, setProducts } = useProd();
 
-    // const [navFixed, setNavFixed] = useState(false);
-
     const navigation = useNavigate();
     const location = useLocation();
 
@@ -46,7 +44,7 @@ function Navbar() {
                     <div className='nav-sup'>
                         <div>
                             <Link to={"/"}>
-                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/logoclari2.jpg" alt="" width={150} height={94}/>
+                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/clara+logo.png" alt="" width={150} height={94}/>
                             </Link>
                         </div>
                         <div>

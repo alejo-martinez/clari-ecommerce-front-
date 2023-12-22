@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 import { useCart } from '../context/CartContext';
 import { useProd } from '../context/ProductContext';
@@ -18,16 +20,11 @@ function ItemDetail() {
     const [loading, setLoading] = useState(true);
     const [prod, setProd] = useState(null);
     const [error, setError] = useState(null);
-    const [addProd, setAddProd] = useState({ idProd: pid, quantity: 0 });
-    const [loadAdd, setLoadAdd] = useState(false);
+
     const [quantity, setQuantity] = useState(0);
 
     const navigation = useNavigate();
     const location = useLocation();
-
-    // const handleAddProd = ({ target: { value } }) => {
-    //     setAddProd({ ...addProd, quantity: parseFloat(value) });
-    // }
 
     const handleQuantity = (e) => {
         const inputValue = e.target.value.replace(/[^0-9]/g, '');
@@ -36,11 +33,11 @@ function ItemDetail() {
 
     const handleIncrement = () => {
         setQuantity(prevValue => (prevValue === prod.stock ? prevValue : prevValue + 1));
-      };
-    
-      const handleDecrement = () => {
+    };
+
+    const handleDecrement = () => {
         setQuantity(prevValue => (prevValue > 0 ? prevValue - 1 : 0));
-      };
+    };
 
     const handleAdd = async () => {
         if (!usuario) {
@@ -48,25 +45,20 @@ function ItemDetail() {
             navigation('/login');
         }
         else {
-            setLoadAdd('loading');
-            setAddProd({ ...addProd, quantity: parseFloat(quantity) });
-            const resp = await addProduct(usuario.cart, addProd.idProd, addProd.quantity);
+            const obj = { idProd: prod._id, quantity: quantity }
+            const resp = await addProduct(usuario.cart, obj);
+
             if (resp.status === 'succes') {
                 if (error) setError(null);
-                setAddProd({ idProd: '', quantity: 0 });
-                setLoadAdd('succes');
-                setTimeout(() => {
-                    setLoadAdd(false);
-                }, 3000);
+                toast.success('Agregado al carrito!', { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false });
+                setQuantity(0);
             }
             if (resp.status === 'error') {
                 if (resp.error === 'Missing data') {
                     setError('Especifica una cantidad');
-                    setLoadAdd(false);
                 }
                 else {
                     setError(resp.error);
-                    setLoadAdd(false);
                 }
             }
         }
@@ -100,29 +92,39 @@ function ItemDetail() {
                             <img src={prod.imageUrl} alt="" width={500} height={500} />
                         </div>
                         <div className='div-info'>
-                            <div className='div-info-props'>
+                            <h3>{prod.title}</h3>
+                            <p>{prod.description}</p>
+                        </div>
+                        <div className='div-numbers'>
+                            <div className='div-numbers-props'>
                                 <div className='item-prop'>
-                                    <h3>{prod.title}</h3>
                                     <span className='span-price'>${prod.price}</span>
                                 </div>
                                 <div className='item-prop'>
                                     <span className='span-stock'>Stock: {prod.stock}</span>
-                                    <label>Cantidad:</label>
-                                    <div>
-                                        <button onClick={handleDecrement}>less</button>
-                                        <input type="text" onChange={handleQuantity} value={quantity} />
-                                        <button onClick={handleIncrement}>add</button>
-                                    </div>
+                                    {usuario && usuario.rol === 'client' || !usuario ?
+                                        <div className='item-prop'>
+                                            <label>Cantidad:</label>
+                                            <div className='div-input-add'>
+                                                <FontAwesomeIcon icon={faMinus} className='btn-handle-quantity' onClick={handleDecrement} />
+                                                <input type="text" onChange={handleQuantity} value={quantity} className='input-quantity-add' />
+                                                <FontAwesomeIcon icon={faPlus} className='btn-handle-quantity' onClick={handleIncrement} />
+                                            </div>
+                                        </div>
+                                        :
+                                        ''
+                                    }
                                 </div>
                             </div>
                             <div className='div-btn-add-prod'>
-                                <div className='div-response'>
-                                    <span className='span-response'>
-                                        {loadAdd === 'succes' ? 'Agregado al carrito!' : loadAdd === 'loading' ? 'Cargando...' : ''}
-                                    </span>
+                                {usuario && usuario.rol === 'client' || !usuario ?
+                                    <button className='btn-add-prod' onClick={handleAdd}>Agregar al carrito</button>
+                                    :
+                                    ''
+                                }
+                                <div className='div-error-add'>
+                                    <span className='error-add'>{error && `${error}`}</span>
                                 </div>
-                                <button className='btn-add-prod' onClick={handleAdd}>Agregar al carrito</button>
-                                <span className='error-add'>{error && `${error}`}</span>
                             </div>
                         </div>
                     </div>

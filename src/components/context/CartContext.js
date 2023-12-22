@@ -27,7 +27,7 @@ const CartProvider = ({children}) =>{
         }
     }
 
-    const addProduct = async(cid, pid, quantity)=>{
+    const addProduct = async(cid, body)=>{
         try {
             const response = await fetch(`${apiUrl}/cart/${cid}`,{
                 method:'POST',
@@ -35,7 +35,7 @@ const CartProvider = ({children}) =>{
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body:JSON.stringify({idProd: pid, quantity: quantity})
+                body:JSON.stringify(body)
             });
             const json = await response.json();
             return json;

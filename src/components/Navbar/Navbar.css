@@ -33,12 +33,6 @@
     align-items: center;
 }
 
-.home{
-    font-size: 24px;
-    color: #075A83;
-    font-weight: 'bold';
-}
-
 .link{
     color: #116586;
     transition: all 0.4s;
@@ -116,13 +110,14 @@
 
 .panel-user-true a{
     text-align: center;
-    color: #116586;
+    color: #555555;
 }
 
 .btn-logout{
     margin: 4px 0;
     border: none;
-    background-color: #D9846E;
+    /* background-color: rgb(148, 9, 9); */
+    background-color: #001F3F;
     color: #fff;
     padding: 3px;
     border-radius: 3px;
@@ -131,7 +126,15 @@
 
 .btn-logout:hover{
     cursor: pointer;
-    background-color: #d9836e7c;
+    background-color: #001f3f85;
+}
+
+.btn-user{
+    transition: all 0.4s;
+}
+
+.link-panel{
+    transition: all 0.4s;
 }
 
 .btn-user:hover{

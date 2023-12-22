@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useProd } from '../context/ProductContext';
 
 import { Link, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 import './SearchBar.css';
 
@@ -34,12 +36,12 @@ function SearchBar() {
         setShowResults(true);
     };
 
-    const handleBlur = ()=>{
+    const handleBlur = () => {
         setShowResults(false);
     }
-    
-    const handleClean = ()=>{
-            setSearchResults([]);
+
+    const handleClean = () => {
+        setSearchResults([]);
     }
 
 
@@ -50,7 +52,7 @@ function SearchBar() {
                 setProducts(response.payload);
                 setLoading(false);
             }
-            if(response.status === 'error'){
+            if (response.status === 'error') {
                 setLoading(false);
             }
         }
@@ -66,21 +68,25 @@ function SearchBar() {
             {loading ? 'Cargando...'
                 :
                 <div className='search-bar-container'>
-                    <div className='div-search'>
-                        <input type="text" placeholder="Buscar productos..." value={searchTerm}  onChange={handleSearch} />
-                    </div>
-                    {showResults && (
-                        <div className='div-results'>
-                            <ul className={searchResults.length === 0 ? '' : 'ul-results'}>
-                                {searchResults.map((prod, index) => (
-                                    <li key={prod._id} onClick={handleClean}>
-                                        <Link to={`/itemdetail/${prod._id}`}>{prod.title}</Link>
-                                    </li>
-                                    
-                                ))}
-                            </ul>
+                    <div>
+
+                        <div className='div-search'>
+                            <input type="text" placeholder="Buscar productos..." value={searchTerm} onChange={handleSearch} />
+                            <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </div>
-                    )}
+                        {showResults && (
+                            <div className='div-results'>
+                                <ul className={searchResults.length === 0 ? '' : 'ul-results'}>
+                                    {searchResults.map((prod, index) => (
+                                        <li key={prod._id} onClick={handleClean}>
+                                            <Link to={`/itemdetail/${prod._id}`} className='prod-result'>{prod.title}</Link>
+                                        </li>
+
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                 </div>
             }
         </>

@@ -1,4 +1,4 @@
-.div-prod-cart{
+.div-prod-cart{ /* Estilos de cada div que contiene a cada producto */
     display: flex;
     flex-flow: row nowrap;
     background-color: #fff;
@@ -9,14 +9,14 @@
     justify-content: space-around;
 }
 
-.div-cart{
+.div-cart{ /* estilos del div que contiene todos los productos en el carrito */
     display: flex;
     flex-flow: column wrap;
     width: 70%;
     justify-items: center;
 }
 
-.div-resume{
+.div-resume{ /* estilos del div que contiene la info de pago */
     display: flex;
     flex-flow: column nowrap;
     width: 30%;
@@ -28,49 +28,49 @@
     height: 200px;
 }
 
-.body-cart{
+.body-cart{ /* div que contiene todo el contenido del carrito */
     display: flex;
     flex-flow: row nowrap;
 }
 
-.span-total{
+.span-total{ /* estilos del span con el monto total */
     margin-top: 8px;
 }
 
-.div-quantity{
+.div-quantity{ /* estilos del div que tiene la cantidad del producto con sus botones */
     display: flex;
     flex-flow: row nowrap;
 }
 
-.input-quantity{
+.input-quantity{ /* estilos del input que muestra la cantidad de producto */
     display: flex;
     margin-left: 20px;
     align-items: center;
 }
 
-.btn-plus{
+.btn-plus{ /* estilos del boton de aumento de producto */
     font-size: 70%;
     margin-left: 8px;
     border: none;
     background-color: transparent;
 }
 
-.btn-minus{
+.btn-minus{ /* estilos del boton de decremento de producto */
     font-size: 70%;
     margin-right: 8px;
     border: none;
     background-color: transparent;
 }
 
-.btn-minus:hover{
+.btn-minus:hover{ /* estilos al hacer hover al boton de decremento */
     cursor: pointer;
 }
 
-.btn-plus:hover{
+.btn-plus:hover{ /* estilos al hacer hover al boton de aumento */
     cursor: pointer;
 }
 
-.btn-endpurchase{
+.btn-endpurchase{ /* estilos del boton de finalizar la compra */
     border: none;
     padding: 12px;
     border-radius: 6px;
@@ -79,16 +79,16 @@
     transition: all 0.4s;
 }
 
-.btn-endpurchase:hover{
+.btn-endpurchase:hover{ /* estilos al hacer hover al boton de finalizar compra */
     cursor: pointer;
     background-color: rgba(0, 0, 255, 0.493);
 }
 
-.prod-title{
+.prod-title{ /* estilos para el titulo de los productos */
     width: 145px;
 }
 
-.div-total{
+.div-total{ /* estilos del div con la cantidad de productos y el monto total */
     display: flex;
     flex-flow: column nowrap;
 }
