@@ -29,8 +29,6 @@ const AuthProvider = ({ children }) => {
                 credentials:'include'
             });
             const json = await response.json();
-            // setUsuario(json.payload);
-            // setIsAuth(true);
             return json;
         } catch (error) {
             return error;
@@ -85,21 +83,12 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async()=>{
                 const response = await current();
-                // console.log(response.status === 'error');
                 if(response.status === 'succes'){
-                    // if(response.payload){
                         setUsuario(response.payload);
                         setIsAuth(true);
                         setLoading(false);
-                    // }
-                    // else{
-                    //     setIsAuth(false);
-                    //     setUsuario(null);
-                    //     setLoading(false);
-                    // }
                 } 
                 if(response.status === 'error'){
-                    console.log(response.error);
                     setUsuario(null);
                     setIsAuth(false);
                     setLoading(false);

@@ -1,0 +1,42 @@
+.body-sendemail{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    /* align-content: center; */
+    align-items: center;
+    margin: auto;
+    height: 40vh;
+    width: 65%;
+}
+
+.div-input-email{
+    display: flex;
+    flex-flow: column nowrap;
+    margin-top: 4rem;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid black;
+    /* height: 50%; */
+}
+
+.btn-sendmail{
+    width: fit-content;
+    margin: auto;
+    margin-top: 10px;
+    border: none;
+    background-color: #001F3F;
+    padding: 6px;
+    border-radius: 4px;
+    color: #fff;
+    transition: all 0.4s;
+}
+
+.btn-sendmail:hover{
+    cursor: pointer;
+    background-color: #001f3f85;
+}
+
+.field-input input{
+    margin-left: 10px;
+}

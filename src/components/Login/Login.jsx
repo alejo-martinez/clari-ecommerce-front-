@@ -19,7 +19,6 @@ function Login() {
 
     const handleLogin = async()=>{
             const response = await login(user);
-            console.log(response);
             if(response.status === 'succes'){
                 setUsuario(response.payload);
                 setIsAuth(true);
@@ -53,6 +52,7 @@ function Login() {
                         <button onClick={handleLogin} className='btn-login'>Iniciar sesión</button>
                     </div>
                 </div>
+                <Link to={"/sendmail"} className='link-forgotpass'>Olvidé mi contraseña</Link>
                 <p className='error'>{error && `${error}`}</p>
             </div>
         </>

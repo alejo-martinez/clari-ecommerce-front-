@@ -1,0 +1,67 @@
+.div-profile{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    max-width: 300px;
+}
+
+.body-profile{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100vh;
+}
+
+.div-profile-field{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 250px;
+    align-items: center;
+}
+
+.div-profile-input {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.div-profile-input input{
+    outline: none;
+}
+
+.title-profile{
+    text-align: center;
+}
+
+.div-btns-update-check{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.btn-update-profile{
+    transition: all 0.4s;
+}
+
+.btn-update-profile:hover{
+    cursor: pointer;
+}
+
+.div-each-field-profile{
+    background-color: #fff;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid black;
+}
+
+.div-pass-input{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.div-pass-input input{
+    margin: 4px 0;
+}

@@ -10,6 +10,8 @@ import ControlPanel from '../ControlPanel/ControlPanel.jsx';
 import ProductCategory from '../ProductCategory/ProductCategory.jsx';
 import Cart from '../Cart/Cart.jsx';
 import ItemDetail from '../ItemDetail/ItemDetail.jsx';
+import ResetPass from '../ResetPass/ResetPass.jsx';
+import SendMail from '../SendMail/SendMail.jsx';
 
 //RUTAS PROTEGIDAS
 import AdminRoute from '../PrivateRoute/AdminRoute.jsx';
@@ -22,6 +24,7 @@ import { AuthProvider } from '../context/AuthContext.js';
 import { ProdProvider } from '../context/ProductContext.js';
 import { CartProvider } from '../context/CartContext.js';
 import { MpProvider } from '../context/MpContext.js';
+import { UserProvider } from '../context/UserContext.js';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -31,35 +34,39 @@ function App() {
   return (
     <>
       <AuthProvider>
-        <ProdProvider>
-          <MpProvider>
-            <CartProvider>
-              <BrowserRouter>
-                <Navbar />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/subcategory/:subcategory" element={<ProductCategory />} />
-                  <Route path="/itemdetail/:pid" element={<ItemDetail />} />
-                  <Route element={<AuthRoute />}>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                  </Route>
-                  <Route element={<LoguedRoute />}>
-                    <Route path="/profile" element={<Profile />} />
-                  </Route>
-                  <Route element={<ClientRoute />}>
-                    <Route path="/cart/:cid" element={<Cart />} />
-                  </Route>
-                  <Route element={<AdminRoute />}>
-                    <Route element={<ControlPanel />} path="/controlpanel" />
-                  </Route>
-                  <Route path='*' element={<h2>Pagina no encontrada</h2>} />
-                </Routes>
-                <ToastContainer />
-              </BrowserRouter>
-            </CartProvider>
-          </MpProvider>
-        </ProdProvider>
+        <UserProvider>
+          <ProdProvider>
+            <MpProvider>
+              <CartProvider>
+                <BrowserRouter>
+                  <Navbar />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/subcategory/:subcategory" element={<ProductCategory />} />
+                    <Route path="/itemdetail/:pid" element={<ItemDetail />} />
+                    <Route path="/resetpass/:uid" element={<ResetPass />}/>
+                    <Route path="/sendmail" element={<SendMail />}/>
+                    <Route element={<AuthRoute />}>
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                    </Route>
+                    <Route element={<LoguedRoute />}>
+                      <Route path="/profile" element={<Profile />} />
+                    </Route>
+                    <Route element={<ClientRoute />}>
+                      <Route path="/cart/:cid" element={<Cart />} />
+                    </Route>
+                    <Route element={<AdminRoute />}>
+                      <Route element={<ControlPanel />} path="/controlpanel" />
+                    </Route>
+                    <Route path='*' element={<h2>Pagina no encontrada</h2>} />
+                  </Routes>
+                  <ToastContainer />
+                </BrowserRouter>
+              </CartProvider>
+            </MpProvider>
+          </ProdProvider>
+        </UserProvider>
       </AuthProvider>
     </>
   );

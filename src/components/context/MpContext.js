@@ -13,8 +13,6 @@ const useMp = ()=>{
 
 const MpProvider = ({children})=>{
 
-    // const [preferenceId, setPreferenceId] = useState(null);
-
     const crearPreferencia = async()=>{
         try {
             const response = await fetch(`${apiUrl}/mercadopago`,{
@@ -26,17 +24,11 @@ const MpProvider = ({children})=>{
             });
             
             const json = await response.json();
-            // console.log(json);
             return json;
         } catch (error) {
             return error;
         }
     }
-
-    // useEffect(() => {
-    //   const fetchData = async()=>{
-    //   }
-    // }, [])
     
 
     return(

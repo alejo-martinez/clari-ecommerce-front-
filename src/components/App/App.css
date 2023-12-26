@@ -71,3 +71,15 @@
     cursor: pointer;
     background-color: #8f97798f;
 }
+
+.link-forgotpass{
+    margin: 5px 0;
+    color: #555555;
+    /* font-weight: bold; */
+    transition: all 0.4s;
+}
+
+.link-forgotpass:hover{
+    color: #313131;
+    
+}
