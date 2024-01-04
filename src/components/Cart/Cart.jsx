@@ -26,10 +26,10 @@ function Cart() {
   const [end, setEnd] = useState(false); // Estado que determina el renderizado del componente de pago
 
   const increase = async (pid, id) => { // Función para incrementar la cantidad de un producto. Al estar dentro 
-    const body = {idProd: pid, quantity:1} // del componente "carrito" solo incrementa los productos que ya estén 
+    const body = { idProd: pid, quantity: 1 } // del componente "carrito" solo incrementa los productos que ya estén 
     const resp = await addProduct(cid, body); // dentro del mismo. El límite del agregado depende del stock del 
     if (resp.status === 'succes') { // producto.
-      let newArray = [...products]; 
+      let newArray = [...products];
       let newTotal = total;
       let newTotalProds = cantProds;
       let prod = products.find(prod => prod._id === id);
@@ -105,8 +105,8 @@ function Cart() {
       {loading ?
         <p>Cargando...</p>
         :
-        products.length !== 0 ? 
-        <div className='body-cart'> {/* Div donde se muestran los productos y la info de pago. */}
+        products.length !== 0 ?
+          <div className='body-cart'> {/* Div donde se muestran los productos y la info de pago. */}
             <div className='div-cart'> {/* div con los productos agregados al carrito */}
               {products.map((prod, index) => {
                 return (
@@ -142,11 +142,19 @@ function Cart() {
             </div>
             <div className='div-resume'> {/* Div con el resumen de la compra */}
               <h4>Resumen de compra</h4>
-              <div className='div-total'> 
+              <div className='div-total'>
                 <span>Productos: {cantProds}</span>
                 <span className='span-total'>Total: ${total}</span>
               </div>
-              {end ? <PagoComponent /> : <button className='btn-endpurchase' onClick={endPurchase}>Finalizar compra</button>} {/* Boton que renderiza el componente de pago */}
+              {end ?
+                <div>
+                  <PagoComponent />
+                  <div>
+                    <button>Pago con efectivo</button>
+                  </div>
+                </div>
+                :
+                <button className='btn-endpurchase' onClick={endPurchase}>Finalizar compra</button>}
             </div>
           </div>
           :

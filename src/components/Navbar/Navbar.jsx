@@ -42,15 +42,15 @@ function Navbar() {
             <div>
                 <div>
                     <div className='nav-sup'>
-                        <div>
+                        <div className='div-img-inicio'>
                             <Link to={"/"}>
-                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/clara+logo.png" alt="" width={150} height={94}/>
+                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/clara+logo.png" alt="" width={150} height={94} className='img-inicio'/>
                             </Link>
                         </div>
-                        <div>
+                        <div className='div-searchbar'>
                             <SearchBar />
                         </div> 
-                        <div>
+                        <div className='div-panel-user'>
                             {usuario ?
                                 <div className='panel-user'>
                                     <div className='panel-user-true'>
@@ -78,7 +78,7 @@ function Navbar() {
                                 :
                                 <div className='links-nav'>
                                     <button onClick={goLogin} className='buttonlink-login'>Iniciar sesión</button>
-                                    <Link to={"/register"} className='link'>Registrarse</Link>
+                                    <Link to={"/register"} className='link link-register'>Registrarse</Link>
                                 </div>
                             }
                         </div>

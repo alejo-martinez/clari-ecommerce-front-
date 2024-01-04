@@ -68,3 +68,23 @@
 .btn-next-page:hover{
     cursor: pointer;
 }
+
+@media screen and (max-width: 448px) {
+    .div-prod{
+        /* width: 200px; */
+        height: 300px;
+    }
+
+    .div-prod img{
+        width: 70%;
+        height: 70%;
+    }
+
+    .div-prod p{
+        font-size: 80%;
+    }
+
+    .div-prod span{
+        font-size: 80%;
+    }
+}

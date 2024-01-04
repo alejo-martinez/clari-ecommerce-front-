@@ -144,3 +144,47 @@
 .link-panel:hover{
     color: #1165865d;
 }
+
+@media screen and (max-width: 840px) {
+
+       .div-img-inicio{
+        width: fit-content;
+       }
+
+       .buttonlink-login{
+        font-size: 80%;
+       }
+
+       .link-register{
+        font-size: 80%;
+       }
+}
+
+@media screen and (max-width: 544px) {
+    .nav-sup{
+        display: grid;
+        grid-template-areas: 
+        "img panel"
+        "search search";
+    }
+
+    .div-img-inicio{
+        grid-area: img;
+    }
+
+    .div-searchbar{
+        grid-area: search;
+    }
+
+    .div-panel-user{
+        grid-area: panel;
+    }
+
+    .nav-item span{
+        font-size: 80%;
+    }
+
+    .submenu-item a{
+        font-size: 80%;
+    }
+}

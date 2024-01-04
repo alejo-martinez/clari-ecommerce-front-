@@ -50,3 +50,45 @@
 .prod-result:hover{
     color: #555555;
 }
+
+@media screen and (max-width: 840px) {
+    .div-search{
+        width: 500px;
+    }
+
+    .div-results{
+        width: 500px;
+    }
+
+    .ul-results{
+        width: 500px;
+    }
+}
+
+@media screen and (max-width: 746px) {
+        .div-search{
+        width: 300px;
+    }
+
+    .div-results{
+        width: 300px;
+    }
+
+    .ul-results{
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 544px) {
+    .div-search{
+        width: 100%;
+    }
+
+    .div-results{
+        width: 100%;
+    }
+
+    .ul-results{
+        width: 100%;
+    }
+}
