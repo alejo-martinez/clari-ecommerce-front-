@@ -34,7 +34,7 @@ function Register() {
   return (
     <>
       <div className='div-content-forms'>
-        <h2>Register</h2>
+        <h2>Registrate !</h2>
         <div className='div-form'>
           <div className='div-input'>
             <label>Nombre</label>

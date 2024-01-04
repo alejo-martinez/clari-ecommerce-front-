@@ -11,7 +11,7 @@
     height: 400px;
     background-color: white;
     padding: 8px;
-
+    gap: 10px;
     border-radius: 10px;
     justify-items: center;
     align-items: center;
@@ -21,8 +21,13 @@
     flex:1;
 }
 
-.div-prod img{
+.div-img img{
     border-radius: 4px;
+    object-fit: contain;
+}
+
+.div-prod p{
+    text-align: justify;
 }
 
 .link-item-detail{
@@ -71,13 +76,7 @@
 
 @media screen and (max-width: 448px) {
     .div-prod{
-        /* width: 200px; */
         height: 300px;
-    }
-
-    .div-prod img{
-        width: 70%;
-        height: 70%;
     }
 
     .div-prod p{
@@ -86,5 +85,9 @@
 
     .div-prod span{
         font-size: 80%;
+    }
+
+    .div-title-prod h2{
+        margin: 0;
     }
 }

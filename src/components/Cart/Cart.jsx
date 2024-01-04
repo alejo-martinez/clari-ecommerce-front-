@@ -111,7 +111,7 @@ function Cart() {
               {products.map((prod, index) => {
                 return (
                   <div key={prod.product._id} className='div-prod-cart'> {/* div de cada producto */}
-                    <img src={prod.product.imageUrl} alt="" width={65} height={65} />
+                    <img src={prod.product.imageUrl} alt="" width={65} height={65} className='img-cart'/>
                     <span className='prod-title'><Link to={`/itemdetail/${prod.product._id}`}>{prod.product.title}</Link></span>
                     <div className='div-quantity'> {/* div para manejar la cantidad de producto */}
                       <span>Cantidad: </span>
@@ -134,8 +134,10 @@ function Cart() {
                         }
                       </div>
                     </div>
-                    <span>Precio unitario: ${prod.product.price}</span>
-                    <span>Precio total: ${prod.product.price * prod.quantity}</span>
+                    <div className='div-price-cart'>
+                      <span>Precio unitario: ${prod.product.price}</span>
+                      <span>Precio total: ${prod.product.price * prod.quantity}</span>
+                    </div>
                   </div>
                 )
               })}

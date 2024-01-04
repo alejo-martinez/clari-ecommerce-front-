@@ -34,10 +34,10 @@ function Home() {
   useEffect(() => {
     const fetchData = async () => {
 
-        const response = await getAllProds(currentPage);
-        if (response.status === 'succes') {
-          setProducts(response.payload);
-          // setPages(response.totalPages);
+      const response = await getAllProds(currentPage);
+      if (response.status === 'succes') {
+        setProducts(response.payload);
+        // setPages(response.totalPages);
         if (response.hasNextPage) setNext(true);
         if (!response.hasNextPage) setNext(false);
         if (response.hasPrevPage) setBack(true);
@@ -68,7 +68,9 @@ function Home() {
                 return (
                   <Link className='link-item-detail' to={`/itemdetail/${prod._id}`} key={`link${prod._id}`}>
                     <div key={prod._id} className='div-prod'>
-                      <img src={prod.imageUrl} alt="prod" height={150} width={200} />
+                      <div className='div-img'>
+                        <img src={prod.imageUrl} alt="prod" height={150} width={200} />
+                      </div>
                       <div className='div-title-prod'>
                         <h2>{prod.title}</h2>
                       </div>
@@ -81,9 +83,9 @@ function Home() {
               })}
             </div>
             <div className='div-pages'>
-              {back && <FontAwesomeIcon icon={faArrowLeft} onClick={handleBackPage} className='btn-back-page'/>}
+              {back && <FontAwesomeIcon icon={faArrowLeft} onClick={handleBackPage} className='btn-back-page' />}
               <span>{currentPage}</span>
-              {next && <FontAwesomeIcon icon={faArrowRight} onClick={handleNextPage} className='btn-next-page'/>}
+              {next && <FontAwesomeIcon icon={faArrowRight} onClick={handleNextPage} className='btn-next-page' />}
             </div>
           </div>
       }

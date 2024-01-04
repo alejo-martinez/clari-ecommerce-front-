@@ -158,10 +158,8 @@
        .link-register{
         font-size: 80%;
        }
-}
 
-@media screen and (max-width: 544px) {
-    .nav-sup{
+       .nav-sup{
         display: grid;
         grid-template-areas: 
         "img panel"
@@ -179,6 +177,10 @@
     .div-panel-user{
         grid-area: panel;
     }
+}
+
+@media screen and (max-width: 544px) {
+
 
     .nav-item span{
         font-size: 80%;
@@ -186,5 +188,28 @@
 
     .submenu-item a{
         font-size: 80%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .nav-item span{
+        font-size: 70%;
+    }
+
+    .submenu{
+        /* width: 80%; */
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 343px) {
+    .submenu-item a{
+        font-size: 70%;
+    }
+}
+
+@media screen and (max-width: 309px) {
+    .submenu-item{
+        padding: 1px;
     }
 }

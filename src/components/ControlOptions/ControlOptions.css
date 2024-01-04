@@ -122,3 +122,23 @@
     cursor: pointer;
     color: rgba(148, 9, 9, 0.384);
 }
+
+@media screen and (max-width: 533px) {
+    .table-delete{
+        width: 100%;
+        font-size: 80%;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 473px) {
+    .table-delete{
+        border-spacing: 0;
+    }
+}
+
+@media screen and (max-width: 323px) {
+    .table-delete{
+        font-size: 60%;
+    }
+}
