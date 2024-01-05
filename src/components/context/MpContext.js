@@ -1,5 +1,4 @@
-import { useEffect, useState, useContext, createContext } from "react";
-import { initMercadoPago } from "@mercadopago/sdk-react";
+import { useContext, createContext } from "react";
 
 const mpContext = createContext();
 
@@ -29,7 +28,7 @@ const MpProvider = ({children})=>{
             return error;
         }
     }
-    
+
 
     return(
         <mpContext.Provider value={{ crearPreferencia}}>

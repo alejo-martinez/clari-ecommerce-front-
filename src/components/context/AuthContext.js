@@ -75,7 +75,6 @@ const AuthProvider = ({ children }) => {
             const json = await response.json();
             return json;
         } catch (error) {
-            console.log(error);
             return error;
         }
     }
@@ -94,8 +93,9 @@ const AuthProvider = ({ children }) => {
                     setLoading(false);
                 }
         }
-        if(!isAuth && !usuario) fetchData();
-      }, [usuario])
+
+        fetchData();
+      }, [])
       
 
     return (
