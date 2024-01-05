@@ -63,6 +63,7 @@
 .div-btn-add-prod{
     width: 50%;
     height: 20%;
+    margin: auto;
 }
 
 .btn-add-prod{
@@ -119,10 +120,77 @@
     margin: 0 5px;
 }
 
-/* .btn-handle-quantity{
-
-} */
-
 .btn-handle-quantity:hover{
     cursor: pointer;
+}
+
+@media screen and (max-width: 1039px) {
+    .div-item-detail{
+        display: grid;
+        grid-template-areas: 
+        "imgDet info"
+        "imgDet numbers";
+    }
+
+    .div-img{
+        grid-area: imgDet;
+    }
+
+    .div-info{
+        grid-area: info;
+    }
+
+    .div-numbers{
+        grid-area: numbers;
+        gap: 10px;
+        margin: auto;
+    }
+
+    .div-btn-add-prod{
+        width: 100%;
+    }
+
+    .div-numbers-props{
+        gap: 17px;
+    }
+}
+
+@media screen and (max-width: 828px) {
+    .div-item-detail{
+        grid-template-areas: 
+        "info"
+        "imgDet"
+        "numbers";
+    }
+
+    .div-info{
+        text-align: center;
+    }
+
+    .div-info h3{
+        text-align: center;
+    }
+
+    .div-img{
+        margin: auto;
+    }
+
+    .div-img img{
+        width: 100%;
+        height: 50%;
+    }
+
+    .div-numbers-props{
+        margin: auto;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .div-info{
+        font-size: 80%;
+    }
+
+    .div-numbers{
+        font-size: 80%;
+    }
 }
