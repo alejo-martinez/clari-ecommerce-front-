@@ -12,6 +12,7 @@ import Cart from '../Cart/Cart.jsx';
 import ItemDetail from '../ItemDetail/ItemDetail.jsx';
 import ResetPass from '../ResetPass/ResetPass.jsx';
 import SendMail from '../SendMail/SendMail.jsx';
+import Ticket from '../Ticket/Ticket.jsx';
 
 //RUTAS PROTEGIDAS
 import AdminRoute from '../PrivateRoute/AdminRoute.jsx';
@@ -46,6 +47,7 @@ function App() {
                     <Route path="/itemdetail/:pid" element={<ItemDetail />} />
                     <Route path="/resetpass/:uid" element={<ResetPass />}/>
                     <Route path="/sendmail" element={<SendMail />}/>
+                    <Route path="/ticket/:cid" element={<Ticket />}/>
                     <Route element={<AuthRoute />}>
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
