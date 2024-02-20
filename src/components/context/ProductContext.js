@@ -14,6 +14,9 @@ const ProdProvider = ({ children }) => {
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [next, setNext] = useState(false);
+    const [back, setBack] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
 
     const getAll = async()=>{
@@ -105,29 +108,62 @@ const ProdProvider = ({ children }) => {
         return json;
     }
 
-    useEffect(() => {
-      const fetchData = async()=>{
-        try {
-            const resp = await getAllProds();
-            if(resp.status === 'succes') {
-                setProducts(resp.payload);
-                setLoading(false)
-            }
-            if(resp.status === 'error'){
-                console.log(resp.error);
-            }
-        } catch (error) {
-            console.log(error);
-        }
+    const handleNextPage = () => {
+        setLoading(true);
+        const newPage = Number(currentPage) + 1;
+        setCurrentPage(newPage);
       }
-      if(loading || products.length === 0) fetchData();
+    
+      const handleBackPage = () => {
+        setLoading(true);
+        const newPage = Number(currentPage) - 1;
+        setCurrentPage(newPage)
+      }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+          const response = await getAllProds(currentPage);
+    
+          if (response.status === 'succes') {
+            setProducts(response.payload.docs);
+
+            if (response.payload.hasNextPage) setNext(true);
+            if (!response.payload.hasNextPage) setNext(false);
+            if (response.payload.hasPrevPage) setBack(true);
+            if (!response.payload.hasPrevPage) setBack(false);
+    
+            setCurrentPage(Number(response.payload.page));
+            setLoading(false);
+        }
+    }
+    
+    fetchData();
+      }, [currentPage])
+    // useEffect(() => {
+    //   const fetchData = async()=>{
+    //     try {
+    //         const resp = await getAllProds();
+    //         // console.log(resp.payload.docs)
+    //         if(resp.status === 'succes') {
+    //             setProducts(resp.payload.docs);
+    //             setLoading(false)
+    //         }
+    //         if(resp.status === 'error'){
+    //             console.log(resp.error);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //   }
+    //   fetchData();
       
     
-    }, [loading])
+    // }, [])
     
     return (
-        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage }}>
-            {children}
+        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage, setBack, setCurrentPage, setNext, currentPage, back, next, products }}>
+            {loading? <p>Cargando...</p> : children}
         </productContext.Provider>
     )
 }

@@ -1,17 +1,22 @@
 .div-prods-general{
     display: flex;
     flex-flow: row wrap;
+    /* align-items: stretch; */
     justify-content: center;
+    margin: 10px 0;
+    /* margin: auto; */
+    gap: 10px;
 }
 
 .div-prod{
     display: flex;
     flex-flow: column nowrap;
     width: 200px;
+
     height: 400px;
     background-color: white;
     padding: 8px;
-    gap: 10px;
+    /* gap: 10px; */
     border-radius: 10px;
     justify-items: center;
     align-items: center;
@@ -21,7 +26,8 @@
     flex:1;
 }
 
-.div-img img{
+
+.div-img-home img{
     border-radius: 4px;
     object-fit: contain;
 }
@@ -32,7 +38,7 @@
 
 .link-item-detail{
     color: black;
-    margin: 7px;
+    /* margin: 7px; */
     transition: all 0.4s;
 }
 
@@ -56,14 +62,34 @@
     margin: 12px 0;
 }
 
+.div-pages span{
+    /* font-size: 120%; */
+    border: 1px solid black;
+    margin: 0 12px;
+    padding: 3px;
+}
+
 .btn-next-page{
     font-size: 90%;
     margin-left: 8px;
+    border: 1px solid black;
+    padding: 5px;
 }
 
 .btn-back-page{
     font-size: 90%;
     margin-right: 8px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.btn-page{
+    transition: all 0.4s;
+}
+
+.btn-page:hover{
+    scale: 1.2;
+    font-weight: bold;
 }
 
 .btn-back-page:hover{

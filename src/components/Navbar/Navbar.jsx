@@ -13,8 +13,7 @@ import './Navbar.css';
 
 function Navbar() {
 
-    const { usuario, logout, setPrevLocation } = useAuth();
-    const { products, setProducts } = useProd();
+    const { usuario, logout, setPrevLocation, current, setUsuario, setLoading } = useAuth();
 
     const navigation = useNavigate();
     const location = useLocation();
@@ -44,7 +43,7 @@ function Navbar() {
                     <div className='nav-sup'>
                         <div className='div-img-inicio'>
                             <Link to={"/"}>
-                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/clara+logo.png" alt="" width={150} height={94} className='img-inicio'/>
+                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/clara+logo+03.png" alt="" width={150} height={94} className='img-inicio'/>
                             </Link>
                         </div>
                         <div className='div-searchbar'>
@@ -127,4 +126,4 @@ function Navbar() {
     )
 }
 
-export default Navbar
+export default React.memo(Navbar);

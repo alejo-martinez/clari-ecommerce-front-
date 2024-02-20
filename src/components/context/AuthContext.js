@@ -79,22 +79,27 @@ const AuthProvider = ({ children }) => {
         }
     }
 
-    useEffect(() => {
-        const fetchData = async()=>{
-                const response = await current();
-                if(response.status === 'succes'){
-                        setUsuario(response.payload);
-                        setIsAuth(true);
-                        setLoading(false);
-                } 
-                if(response.status === 'error'){
-                    setUsuario(null);
-                    setIsAuth(false);
+    const fetchData = async()=>{
+            const response = await current();
+            if(response.status === 'succes'){
+                    setUsuario(response.payload);
+                    setIsAuth(true);
                     setLoading(false);
-                }
-        }
+            } 
+            if(response.status === 'error'){
+                setUsuario(null);
+                setIsAuth(false);
+                setLoading(false);
+            }
+    }
+    
+    useEffect(() => {
+        console.log('entro')
+        const newFetchData = async()=>{
+            await fetchData();
 
-        fetchData();
+        }
+        newFetchData();
       }, [])
       
 

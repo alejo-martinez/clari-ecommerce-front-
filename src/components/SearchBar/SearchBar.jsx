@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useProd } from '../context/ProductContext';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,8 +10,6 @@ import './SearchBar.css';
 
 function SearchBar() {
     const { getAll } = useProd();
-
-    const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -35,10 +33,6 @@ function SearchBar() {
         setSearchResults(filteredResults);
         setShowResults(true);
     };
-
-    const handleBlur = () => {
-        setShowResults(false);
-    }
 
     const handleClean = () => {
         setSearchResults([]);

@@ -21,7 +21,7 @@ function OptionDelete() {
                 setProducts((prevProds)=> prevProds.filter((prod) => prod._id !== id));
             }
             if(resp.status === 'error'){
-                console.log(resp.error);
+                toast.error(resp.error, {position: "top-center", autoClose: 5000, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: true});
             }
         } catch (error) {
             setError(error);

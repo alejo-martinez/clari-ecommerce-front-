@@ -20,10 +20,11 @@ function PagoComponent() {
 
             if (resp.status === 'succes') {
                 setPreferenceId(resp.payload);
+                console.log(resp.payload)
                 setLoading(false);
             }
             if (resp.status === 'error') {
-                setError('error')
+                setError(resp.error)
                 setLoading(false)
             }
         }
@@ -37,7 +38,7 @@ function PagoComponent() {
             {loading ? 'Cargando...'
                 :
                 error ?
-                    'Error'
+                    error
                     :
                     <Wallet initialization={{ preferenceId: preferenceId, redirectMode: 'self' }} />
             }

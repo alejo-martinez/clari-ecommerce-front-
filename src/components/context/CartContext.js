@@ -12,7 +12,7 @@ const useCart = ()=>{
 
 const CartProvider = ({children}) =>{
 
-
+    const [loading, setLoading] = useState(true);
 
     const getProductsCart = async(id)=>{
         try {
@@ -21,6 +21,7 @@ const CartProvider = ({children}) =>{
                 credentials:'include'
             })
             const json = await response.json();
+            setLoading(false);
             return json;
         } catch (error) {
             return error;
@@ -74,8 +75,91 @@ const CartProvider = ({children}) =>{
         }
     }
 
+    const getAllTickets = async()=>{
+        try {
+            const response = await fetch(`${apiUrl}/ticket`, {
+                method:'GET',
+                credentials:'include'
+            });
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    const getTicketByPreference = async(tid)=>{
+        try {
+            const response = await fetch(`${apiUrl}/ticket/preference/${tid}`, {
+                method : "GET",
+                credentials: "include"
+            });
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    const getTicketById = async(id)=>{
+        try {
+            const response = await fetch(`${apiUrl}/ticket/${id}`,{
+                method:"GET",
+                credentials:"include"
+            });
+
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    const createTicket = async(ticket)=>{
+        try {
+            const response = await fetch(`${apiUrl}/ticket/`, {
+                method:'POST',
+                credentials:'include',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ticket)
+            });
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    const approveTicket = async(id)=>{
+        try {
+            const response = await fetch(`${apiUrl}/ticket/approved/${id}`,{
+                method:'PUT',
+                credentials:'include'
+            });
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    const deleteTicket = async(id)=>{
+        try {
+            const response = await fetch(`${apiUrl}/ticket/delete/${id}`,{
+                method:'DELETE',
+                credentials:'include'
+            });
+            const json = await response.json();
+            return json;
+        } catch (error) {
+            return error;
+        }
+    }
+
     return(
-        <cartContext.Provider value={{getProductsCart, addProduct, removeProd, emptyCart}}>
+        <cartContext.Provider value={{getProductsCart, addProduct, removeProd, emptyCart, getTicketByPreference, getAllTickets, getTicketById, createTicket, approveTicket, deleteTicket}}>
             {children}
         </cartContext.Provider>
     )

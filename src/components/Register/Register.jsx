@@ -31,6 +31,12 @@ function Register() {
     }
   }
 
+  const handleKeyPress = async(event) => {
+    if (event.key === 'Enter') {
+        await handleRegister();
+    }
+}
+
   return (
     <>
       <div className='div-content-forms'>
@@ -38,23 +44,23 @@ function Register() {
         <div className='div-form'>
           <div className='div-input'>
             <label>Nombre</label>
-            <input type="text" name="name" onChange={handleChange} />
+            <input type="text" name="name" onChange={handleChange} onKeyDown={handleKeyPress} />
           </div>
           <div className='div-input'>
             <label>Segundo nombre</label>
-            <input type="text" name="second_name" onChange={handleChange} />
+            <input type="text" name="second_name" onChange={handleChange} onKeyDown={handleKeyPress} />
           </div>
           <div className='div-input'>
             <label>Apellido</label>
-            <input type="text" name="last_name" onChange={handleChange} />
+            <input type="text" name="last_name" onChange={handleChange} onKeyDown={handleKeyPress} />
           </div>
           <div className='div-input'>
             <label>Email</label>
-            <input type="email" name="email" onChange={handleChange} />
+            <input type="email" name="email" onChange={handleChange} onKeyDown={handleKeyPress} />
           </div>
           <div className='div-input'>
             <label>Contraseña</label>
-            <input type="password" name="password" onChange={handleChange} />
+            <input type="password" name="password" onChange={handleChange} onKeyDown={handleKeyPress} />
           </div>
           <div>
             <button onClick={handleRegister} className='btn-login'>Registrarse</button>

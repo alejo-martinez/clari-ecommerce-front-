@@ -14,12 +14,12 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: flex-end;
-    width: 50%;
+    /* width: 50%; */
     justify-content: space-between;
 }
 
 .div-img{
-    width: fit-content;
+    width: 70%;
     align-items: center;
 }
 
@@ -45,7 +45,7 @@
 
 .div-info h3{
     font-size: 130%;
-    text-align: start;
+    text-align: center;
 }
 
 .div-info p{
@@ -85,8 +85,9 @@
 .div-numbers-props{
     display: flex;
     flex-flow: column nowrap;
-    height: 50%;
+    /* height: 50%; */
     justify-content: space-between;
+    width: 100%;
 }
 
 .div-error-add{
@@ -122,6 +123,13 @@
 
 .btn-handle-quantity:hover{
     cursor: pointer;
+}
+
+.item-detail{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    width: 30%;
 }
 
 @media screen and (max-width: 1039px) {

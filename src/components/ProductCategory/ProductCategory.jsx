@@ -10,7 +10,6 @@ function ProductCategory() {
     const { subcategory } = useParams();
     const { getBySubCategory } = useProd();
 
-    // console.log(prods);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,7 +22,6 @@ function ProductCategory() {
                 if (resp.status === 'error') {
                     setError(resp.error);
                     setProds([]);
-                    console.log(resp.error);
                 }
             } catch (error) {
                 setError(error);

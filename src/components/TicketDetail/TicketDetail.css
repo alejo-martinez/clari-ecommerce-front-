@@ -1,0 +1,66 @@
+.ticket{
+    width: 30%;
+    background-color: #fff;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-items: center;
+    align-items: center;
+    margin: auto;
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
+
+.title-prods{
+    margin-top: 1rem;
+}
+
+.div-info-pago{
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 4px;
+    margin: 12px 0;
+}
+
+.div-each-item{
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 5px 0;
+}
+
+.ticket-field-important{
+    font-weight: bold;
+}
+
+.pay-id{
+    color: rgb(245, 130, 36);
+}
+
+.btn-ticket{
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.4s;
+}
+
+.btn-ticket:hover{
+    opacity: .7;
+}
+
+.payed{
+    background-color: rgb(0, 2, 128);
+}
+
+.canceled{
+    background-color: rgb(105, 54, 13);
+    transition: all 0.4s;
+}
+
+.div-btns-ticket{
+    display: flex;
+    flex-flow: column;
+    gap: 16px;
+    margin-top: 10px;
+}

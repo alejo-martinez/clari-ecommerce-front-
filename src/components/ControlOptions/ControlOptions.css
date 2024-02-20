@@ -123,6 +123,29 @@
     color: rgba(148, 9, 9, 0.384);
 }
 
+.all-tickets{
+    display: flex;
+    flex-flow: column wrap;
+    margin-top: 2rem;
+}
+
+.div-each-ticket{
+    width: fit-content;
+    /* margin: auto; */
+    margin-left: 2rem;
+}
+
+.title-tickets{
+    text-align: center;
+    margin: 14px;
+}
+
+.body-searchbar{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
 @media screen and (max-width: 533px) {
     .table-delete{
         width: 100%;

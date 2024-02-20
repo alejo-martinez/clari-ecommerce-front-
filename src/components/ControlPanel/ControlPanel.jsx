@@ -7,6 +7,7 @@ import OptionDelete from '../ControlOptions/OptionDelete';
 import OptionUpdate from '../ControlOptions/OptionUpdate';
 
 import './ControlPanel.css';
+import OptionTickets from '../ControlOptions/OptionTickets';
 
 function ControlPanel() {
     const [option, setOption] = useState(null);
@@ -15,6 +16,7 @@ function ControlPanel() {
         if (value === 'create') setOption('create');
         if (value === 'update') setOption('update');
         if (value === 'delete') setOption('delete');
+        if (value === 'ventas') setOption('ventas');
         if (value === null) setOption(null);
     }
 
@@ -28,9 +30,8 @@ function ControlPanel() {
                             <button onClick={() => handleOption('create')} className='btn-option'>Crear productos</button>
                             <button onClick={() => handleOption('update')} className='btn-option'>Actualizar productos</button>
                             <button onClick={() => handleOption('delete')} className='btn-option'>Borrar productos</button>
-                            {/* <FontAwesomeIcon title='Crear producto' icon={faPlus} size='2x' onClick={() => handleOption('create')} className='btn-option' />
-                            <FontAwesomeIcon title='Actualizar producto' icon={faFilePen} size='2x' onClick={() => handleOption('update')} className='btn-option' />
-                            <FontAwesomeIcon title='Borrar producto' icon={faBan} size='2x' onClick={() => handleOption('delete')} className='btn-option' /> */}
+                            <button onClick={() => handleOption('ventas')} className='btn-option'>Ver órdenes</button>
+                            
                         </div>
                     </div>
                     :
@@ -47,7 +48,7 @@ function ControlPanel() {
             </div>
 
             <div>
-                {option === 'create' ? <OptionAdd /> : option === 'update' ? <OptionUpdate /> : option === 'delete' ? <OptionDelete /> : ''}
+                {option === 'create' ? <OptionAdd /> : option === 'update' ? <OptionUpdate /> : option === 'delete' ? <OptionDelete /> : option === 'ventas'?  <OptionTickets/> : ''}
             </div>
         </>
     )

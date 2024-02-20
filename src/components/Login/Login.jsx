@@ -35,6 +35,12 @@ function Login() {
             
     }
 
+    const handleKeyPress = async(event) => {
+        if (event.key === 'Enter') {
+            await handleLogin();
+        }
+    }
+
     return (
         <>
             <div className='div-content-forms'>
@@ -42,11 +48,11 @@ function Login() {
                 <div className='div-form'>
                     <div className='div-input'>
                         <label >Email:</label>
-                        <input type="email" name="email" onChange={handleChange} />
+                        <input type="email" name="email" onChange={handleChange} onKeyDown={handleKeyPress}/>
                     </div>
                     <div className='div-input'>
                         <label >Contraseña:</label>
-                        <input type="password" name="password" onChange={handleChange} />
+                        <input type="password" name="password" onChange={handleChange} onKeyDown={handleKeyPress}/>
                     </div>
                     <div>
                         <button onClick={handleLogin} className='btn-login'>Iniciar sesión</button>

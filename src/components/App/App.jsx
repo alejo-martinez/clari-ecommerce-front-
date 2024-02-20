@@ -12,7 +12,7 @@ import Cart from '../Cart/Cart.jsx';
 import ItemDetail from '../ItemDetail/ItemDetail.jsx';
 import ResetPass from '../ResetPass/ResetPass.jsx';
 import SendMail from '../SendMail/SendMail.jsx';
-import Ticket from '../Ticket/Ticket.jsx';
+import TicketDetail from '../TicketDetail/TicketDetail.jsx';
 
 //RUTAS PROTEGIDAS
 import AdminRoute from '../PrivateRoute/AdminRoute.jsx';
@@ -45,9 +45,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/subcategory/:subcategory" element={<ProductCategory />} />
                     <Route path="/itemdetail/:pid" element={<ItemDetail />} />
-                    <Route path="/resetpass/:uid" element={<ResetPass />}/>
-                    <Route path="/sendmail" element={<SendMail />}/>
-                    <Route path="/ticket/:cid" element={<Ticket />}/>
+                    <Route path="/resetpass/:uid" element={<ResetPass />} />
+                    <Route path="/sendmail" element={<SendMail />} />
                     <Route element={<AuthRoute />}>
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
@@ -60,6 +59,7 @@ function App() {
                     </Route>
                     <Route element={<AdminRoute />}>
                       <Route element={<ControlPanel />} path="/controlpanel" />
+                      <Route path="/ticketdetail/:tid" element={<TicketDetail />} />
                     </Route>
                     <Route path='*' element={<h2>Pagina no encontrada</h2>} />
                   </Routes>

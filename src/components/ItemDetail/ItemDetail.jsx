@@ -91,39 +91,46 @@ function ItemDetail() {
                         <div className='div-img'>
                             <img src={prod.imageUrl} alt="" width={500} height={500} />
                         </div>
-                        <div className='div-info'>
-                            <h3>{prod.title}</h3>
-                            <p>{prod.description}</p>
-                        </div>
-                        <div className='div-numbers'>
-                            <div className='div-numbers-props'>
-                                <div className='item-prop'>
-                                    <span className='span-price'>${prod.price}</span>
-                                </div>
-                                <div className='item-prop'>
-                                    <span className='span-stock'>Stock: {prod.stock}</span>
-                                    {usuario && usuario.rol === 'client' || !usuario ?
+                        <div className='item-detail'>
+
+                            <div className='div-info'>
+                                <h3>{prod.title}</h3>
+                                <p>{prod.description}</p>
+                            </div>
+                            <div className='div-numbers'>
+                                <div className='div-numbers-props'>
+                                    <div className='item-prop'>
+                                        <span className='span-price'>${prod.price}</span>
+                                    </div>
+                                    {prod.stock !== 0 ?
                                         <div className='item-prop'>
-                                            <label>Cantidad:</label>
-                                            <div className='div-input-add'>
-                                                <FontAwesomeIcon icon={faMinus} className='btn-handle-quantity' onClick={handleDecrement} />
-                                                <input type="text" onChange={handleQuantity} value={quantity} className='input-quantity-add' />
-                                                <FontAwesomeIcon icon={faPlus} className='btn-handle-quantity' onClick={handleIncrement} />
-                                            </div>
+                                            <span className='span-stock'>Stock: {prod.stock}</span>
+                                            {(usuario && usuario.rol === 'client') || !usuario ?
+                                                <div className='item-prop'>
+                                                    <label>Cantidad:</label>
+                                                    <div className='div-input-add'>
+                                                        <FontAwesomeIcon icon={faMinus} className='btn-handle-quantity' onClick={handleDecrement} />
+                                                        <input type="text" onChange={handleQuantity} value={quantity} className='input-quantity-add' />
+                                                        <FontAwesomeIcon icon={faPlus} className='btn-handle-quantity' onClick={handleIncrement} />
+                                                    </div>
+                                                </div>
+                                                :
+                                                ''
+                                            }
                                         </div>
+                                        :
+                                        <span>Sin stock</span>
+                                    }
+                                </div>
+                                <div className='div-btn-add-prod'>
+                                    {(usuario && usuario.rol === 'client') || !usuario ?
+                                        <button className='btn-add-prod' onClick={handleAdd}>Agregar al carrito</button>
                                         :
                                         ''
                                     }
-                                </div>
-                            </div>
-                            <div className='div-btn-add-prod'>
-                                {usuario && usuario.rol === 'client' || !usuario ?
-                                    <button className='btn-add-prod' onClick={handleAdd}>Agregar al carrito</button>
-                                    :
-                                    ''
-                                }
-                                <div className='div-error-add'>
-                                    <span className='error-add'>{error && `${error}`}</span>
+                                    <div className='div-error-add'>
+                                        <span className='error-add'>{error && `${error}`}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

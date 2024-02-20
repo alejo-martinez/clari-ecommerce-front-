@@ -6,7 +6,7 @@
     border-radius: 6px;
     margin: 8px;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .div-cart{ /* estilos del div que contiene todos los productos en el carrito */
@@ -107,8 +107,63 @@
     border-radius: 8px;
 }
 
+.div-pay-option{
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+}
+
+.btn-back-pay{
+    align-self: flex-end;
+    border: none;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+.btn-pay-cash{
+    border: none;
+    width: fit-content;
+    align-self: center;
+    padding: 6px;
+    border-radius: 6px;
+    background-color: blue;
+    color: #fff;
+    transition: all 0.4s;
+    margin-top: 7px;
+}
+
+.btn-pay-cash:hover{
+    cursor: pointer;
+    background-color: darkblue;
+}
+
 .btn-emptyCart:hover {
     cursor: pointer;
+}
+
+.div-price-cart{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.div-btn-remove{
+    align-self: flex-start;
+}
+
+.btn-remove-prod{
+    border: none;
+    cursor: pointer;
+}
+
+.div-btns-pay{
+    display: flex;
+    flex-flow: column;
+    gap: 8px;
+}
+
+.div-checkbox{    
+    display: flex;
+    justify-content: space-between;
 }
 
 
