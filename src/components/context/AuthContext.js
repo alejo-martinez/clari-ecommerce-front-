@@ -29,6 +29,7 @@ const AuthProvider = ({ children }) => {
                 credentials:'include'
             });
             const json = await response.json();
+            console.log(document.cookie)
             return json;
         } catch (error) {
             return error;
@@ -94,7 +95,6 @@ const AuthProvider = ({ children }) => {
     }
     
     useEffect(() => {
-        console.log('entro')
         const newFetchData = async()=>{
             await fetchData();
 
