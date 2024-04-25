@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faFilePen, faTrashCan, faArrowLeft, faBan } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, Link } from 'react-router-dom';
 
 import OptionAdd from '../ControlOptions/OptionAdd';
 import OptionDelete from '../ControlOptions/OptionDelete';
@@ -10,34 +11,39 @@ import './ControlPanel.css';
 import OptionTickets from '../ControlOptions/OptionTickets';
 
 function ControlPanel() {
+    const location = useLocation();
+
     const [option, setOption] = useState(null);
 
-    const handleOption = (value) => {
-        if (value === 'create') setOption('create');
-        if (value === 'update') setOption('update');
-        if (value === 'delete') setOption('delete');
-        if (value === 'ventas') setOption('ventas');
-        if (value === null) setOption(null);
-    }
+    useEffect(() =>{
+        const queryParams = new URLSearchParams(location.search);
+        const optionParam = queryParams.get('option');
+        if(optionParam) setOption(optionParam);
+        else setOption('main');
+    }, [location.search]);
+
+
 
     return (
         <>
             <div>
-                {option === null ?
+                {(!option || option === 'main') ?
                     <div className='div-controlPanel'>
                         <h2>Panel de control</h2>
                         <div className='div-options'>
-                            <button onClick={() => handleOption('create')} className='btn-option'>Crear productos</button>
-                            <button onClick={() => handleOption('update')} className='btn-option'>Actualizar productos</button>
-                            <button onClick={() => handleOption('delete')} className='btn-option'>Borrar productos</button>
-                            <button onClick={() => handleOption('ventas')} className='btn-option'>Ver órdenes</button>
+                            <Link to={'/controlpanel?option=create'} className='btn-option'>Crear productos</Link>
+                            <Link to={'/controlpanel?option=update'} className='btn-option'>Actualizar productos</Link>
+                            <Link to={'/controlpanel?option=delete'} className='btn-option'>Eliminar productos</Link>
+                            <Link to={'/controlpanel?option=ventas'} className='btn-option'>Ver ventas</Link>
                             
                         </div>
                     </div>
                     :
                     <div className='div-controlPanelOption'>
                         <div>
-                            <FontAwesomeIcon icon={faArrowLeft} size='2x' onClick={() => handleOption(null)} className='iconBack' />
+                            <Link to={'/controlpanel?option=main'}>
+                            <FontAwesomeIcon icon={faArrowLeft} size='2x' className='iconBack' />
+                            </Link>
                         </div>
                         <div className='div-title'>
                             <h2>Panel de control</h2>
@@ -48,7 +54,7 @@ function ControlPanel() {
             </div>
 
             <div>
-                {option === 'create' ? <OptionAdd /> : option === 'update' ? <OptionUpdate /> : option === 'delete' ? <OptionDelete /> : option === 'ventas'?  <OptionTickets/> : ''}
+                {option === 'create' && <OptionAdd />} {option === 'update' && <OptionUpdate />}  {option === 'delete' && <OptionDelete /> } {option === 'ventas'&&  <OptionTickets/>}
             </div>
         </>
     )

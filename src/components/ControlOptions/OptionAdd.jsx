@@ -7,20 +7,20 @@ import './ControlOptions.css';
 
 function OptionAdd() {
 
-    const [category, setCategory] = useState('');
-    const [producto, setProducto] = useState({ title: '', description: '', price: '', stock:'', file: '', category: '', subCategory: '' });
+
+    const [producto, setProducto] = useState({ title: '', description: '', files: [], variants: [], category: '' });
     const [error, setError] = useState(null);
+
 
     const { createProd } = useProd();
 
     const fileRef = useRef(null);
 
-    const resetFile = ()=>{
-        if(fileRef.current) fileRef.current.value = '';
+    const resetFile = () => {
+        if (fileRef.current) fileRef.current.value = '';
     }
 
     const handleChange = ({ target: { value } }) => {
-        setCategory(value);
         setProducto({ ...producto, 'category': value });
     }
 
@@ -29,7 +29,8 @@ function OptionAdd() {
     }
 
     const handleImg = (e) => {
-        setProducto({ ...producto, ['file']: e.target.files[0] })
+        const filesArray = Array.from(e.target.files); 
+        setProducto({ ...producto, files: filesArray });
     }
 
     const handleSubmit = async () => {
@@ -37,8 +38,7 @@ function OptionAdd() {
             const resp = await createProd(producto);
             if (resp.status === 'succes') {
                 toast.success(resp.message, { position: "top-right", autoClose: 2000, hideProgressBar: true, closeOnClick: false, closeButton: false });
-                setProducto({ title: '', description: '', price: '', file: '', stock: '', category: '', subCategory: '' });
-                setCategory('');
+                setProducto({ title: '', description: '', files: [], variants: [], category: '' });
                 resetFile();
             }
             if (resp.status === 'error') setError(resp.error);
@@ -47,13 +47,42 @@ function OptionAdd() {
         }
     }
 
+    const handleVariant = (e, i) => {
+        const { name, value } = e.target;
+        const variants = [...producto.variants];
+        variants[i][name] = value;
+        setProducto({ ...producto, variants: JSON.parse(JSON.stringify(variants)) }); 
+    }
+    
+    const handleSize = (e, i, index) => {
+        const { name, value } = e.target;
+        const variants = [...producto.variants];
+        const sizes = [...variants[index].sizes];
+        sizes[i][name] = value;
+        variants[index].sizes = sizes;
+        setProducto({ ...producto, variants: JSON.parse(JSON.stringify(variants)) }); 
+    }
+
+    const addSize = (index) => {
+        const prod = { ...producto };
+        prod.variants[index].sizes.push({ size: '', stock: '', price: '' });
+        setProducto(prod);
+    }
+
+
+    const addVariant = () => {
+        const prod = { ...producto }
+        prod.variants.push({ color: "", sizes: [] })
+        setProducto(prod);
+    }
+   
+
     return (
         <div className='body-add'>
             <h3>Crear producto</h3>
             <div className="divForm">
                 <form encType="multipart/form-data">
                     <div className='div-input-form'>
-
 
                         <label>Título</label>
                         <input type="text" name='title' value={producto.title} onChange={handleChangeProd} />
@@ -63,16 +92,8 @@ function OptionAdd() {
                         <input type="text" name='description' value={producto.description} onChange={handleChangeProd} />
                     </div>
                     <div className='div-input-form'>
-                        <label>Precio</label>
-                        <input type="number" name='price' value={producto.price} onChange={handleChangeProd} />
-                    </div>
-                    <div className='div-input-form'>
-                        <label>Imagen</label>
-                        <input type="file" name='file' ref={fileRef} onChange={handleImg} />
-                    </div>
-                    <div className='div-input-form'>
-                        <label>Stock</label>
-                        <input type="number" name='stock' value={producto.stock} onChange={handleChangeProd} />
+                        <label>Imágenes</label>
+                        <input type="file" name='files' ref={fileRef} onChange={handleImg} multiple />
                     </div>
                     <div className='div-input-form'>
                         <label>Categoría</label>
@@ -84,37 +105,34 @@ function OptionAdd() {
                         </select>
                     </div>
                     <div className='div-input-form'>
-                        <label>Subcategoría</label>
-                        {category === 'velas' ?
-                            <select name="subCategory" onChange={handleChangeProd} value={producto.subCategory}>
-                                <option value="decorativas">Decorativas</option>
-                                <option value="eventos">Para eventos</option>
-                                <option value="aromaticas">Aromáticas</option>
-                                <option value="molde">De molde</option>
-                            </select>
-                            :
-                            category === 'mantas' ?
-                                <select name="subCategory" onChange={handleChangeProd}>
-                                    <option value="sillones">Para sillones</option>
-                                    <option value="mesa">Caminos de mesa</option>
-                                    <option value="individual">Manteles individuales</option>
-                                </select>
-                                :
-                                category === 'flores' ?
-                                    <select name="subCategory" onChange={handleChangeProd}>
-                                        <option value="secas">Secas</option>
-                                        <option value="textiles">Textiles</option>
-                                    </select>
-                                    :
-                                    category === 'articulos' ?
-                                        <select name="subCategory" onChange={handleChangeProd}>
-                                            <option value="hornillos">Fogoneros</option>
-                                            <option value="fuentes">Fuentes para jardines</option>
-                                            <option value="figuras">Figuras de india</option>
-                                        </select>
-                                        :
-                                        ''
-                        }
+                        <button type='button' onClick={addVariant}>Agregar talle</button>
+                        {producto.variants.map((el, index) => {
+                            return (
+                                <div key={`el${index}`}>
+                                    <label>Color</label>
+                                    <input type="text" name='color' onChange={(e) => handleVariant(e, index)} />
+                                    <button type='button' onClick={() => addSize(index)}>+ talle</button>
+                                    {el.sizes.map((size, i) => {
+                                        return (
+                                            <div key={`sizeNro${i}`}>
+                                                <div>
+                                                    <label>Talle</label>
+                                                    <input type="text" name='size' onChange={(e) => handleSize(e, i, index)} />
+                                                </div>
+                                                <div>
+                                                    <label>Stock</label>
+                                                    <input type="number" name='stock' onChange={(e) => handleSize(e, i, index)} />
+                                                </div>
+                                                <div>
+                                                    <label>Precio</label>
+                                                    <input type="number" name='price' onChange={(e) => handleSize(e, i, index)} />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
+                        })}
                     </div>
                 </form>
                 <button className='btn-create' onClick={handleSubmit}>Crear producto</button>

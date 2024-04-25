@@ -47,13 +47,28 @@ const ProdProvider = ({ children }) => {
     }
 
     const createProd = async (prod) => {
-        const formData = new FormData();
+        
+    const formData = new FormData();
 
-        const fields = ['title', 'description', 'price', 'file', 'stock', 'category', 'subCategory'];
+    
+    formData.append('title', prod.title);
+    formData.append('description', prod.description);
+    formData.append('category', prod.category);
 
-        fields.forEach((field) => {
-            formData.append(field, prod[field]);
+    
+    for (let i = 0; i < prod.files.length; i++) {
+        formData.append('files', prod.files[i]);
+    }
+
+   
+    prod.variants.forEach((variant, index) => {
+        formData.append(`variants[${index}][color]`, variant.color);
+        variant.sizes.forEach((size, sizeIndex) => {
+            formData.append(`variants[${index}][sizes][${sizeIndex}][size]`, size.size);
+            formData.append(`variants[${index}][sizes][${sizeIndex}][stock]`, size.stock);
+            formData.append(`variants[${index}][sizes][${sizeIndex}][price]`, size.price);
         });
+    });
 
         const response = await fetch(`${apiUrl}/product/`, {
             method: 'POST',
@@ -108,17 +123,17 @@ const ProdProvider = ({ children }) => {
         return json;
     }
 
-    const handleNextPage = () => {
-        setLoading(true);
-        const newPage = Number(currentPage) + 1;
-        setCurrentPage(newPage);
-      }
+    // const handleNextPage = () => {
+    //     setLoading(true);
+    //     const newPage = Number(currentPage) + 1;
+    //     setCurrentPage(newPage);
+    //   }
     
-      const handleBackPage = () => {
-        setLoading(true);
-        const newPage = Number(currentPage) - 1;
-        setCurrentPage(newPage)
-      }
+    //   const handleBackPage = () => {
+    //     setLoading(true);
+    //     const newPage = Number(currentPage) - 1;
+    //     setCurrentPage(newPage)
+    //   }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -140,29 +155,9 @@ const ProdProvider = ({ children }) => {
     
     fetchData();
       }, [currentPage])
-    // useEffect(() => {
-    //   const fetchData = async()=>{
-    //     try {
-    //         const resp = await getAllProds();
-    //         // console.log(resp.payload.docs)
-    //         if(resp.status === 'succes') {
-    //             setProducts(resp.payload.docs);
-    //             setLoading(false)
-    //         }
-    //         if(resp.status === 'error'){
-    //             console.log(resp.error);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //   }
-    //   fetchData();
-      
-    
-    // }, [])
     
     return (
-        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage, setBack, setCurrentPage, setNext, currentPage, back, next, products }}>
+        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage, setBack, setCurrentPage, setNext, currentPage, back, next }}>
             {loading? <p>Cargando...</p> : children}
         </productContext.Provider>
     )

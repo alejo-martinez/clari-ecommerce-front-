@@ -4,6 +4,7 @@
     background-color: #fff;
     padding: 14px;
     border-radius: 3px;
+    justify-content: space-around;
 }
 
 .body-item{
@@ -25,6 +26,17 @@
 
 .div-img img{
     object-fit: contain;
+}
+
+/* .img-container{
+    /* width: 800px;
+    height: 800px; */
+    /* max-width: 400px;
+    max-height: 550px */
+/* } */
+
+.slider-img{
+    width: 400px;
 }
 
 .item-prop{
@@ -138,6 +150,7 @@
         grid-template-areas: 
         "imgDet info"
         "imgDet numbers";
+        justify-items: center;
     }
 
     .div-img{

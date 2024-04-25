@@ -3,12 +3,17 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import Slider from 'react-slick';
+
+import Arrow from '../CustomArrows/Arrow';
 
 import { useCart } from '../context/CartContext';
 import { useProd } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 
 import './ItemDetail.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function ItemDetail() {
     const { addProduct } = useCart();
@@ -16,10 +21,12 @@ function ItemDetail() {
     const { usuario, setPrevLocation } = useAuth();
 
     const { pid } = useParams();
-
+    
     const [loading, setLoading] = useState(true);
     const [prod, setProd] = useState(null);
     const [error, setError] = useState(null);
+    const [variant, setVariant] = useState(null)
+    const [sizes, setSizes] = useState(null);
 
     const [quantity, setQuantity] = useState(0);
 
@@ -69,6 +76,8 @@ function ItemDetail() {
             const resp = await getById(pid);
             if (resp.status === 'succes') {
                 setProd(resp.payload);
+                setVariant(resp.payload.variants[0]);
+                setSizes(resp.payload.variants[0].sizes);
                 setLoading(false);
             }
             if (resp.status === 'error') {
@@ -81,6 +90,18 @@ function ItemDetail() {
         fetchData();
     }, [pid])
 
+
+    const settings = {
+        dots: false,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        className: 'slider-img',
+        nextArrow: <Arrow />,
+        prevArrow: <Arrow />
+    }
+
     return (
         <div className='body-item'>
             {loading ?
@@ -88,8 +109,16 @@ function ItemDetail() {
                 :
                 prod ?
                     <div className='div-item-detail'>
-                        <div className='div-img'>
-                            <img src={prod.imageUrl} alt="" width={500} height={500} />
+                        <div className='img-container'>
+                            <Slider {...settings}>
+                                {prod.imagesUrl.map((img, i) => {
+                                    return (
+                                        <div key={`img${i}`} className='div-img-home'>
+                                            <img src={img} height={500} width={400} alt="Imagen de producto" />
+                                        </div>
+                                    )
+                                })}
+                            </Slider>
                         </div>
                         <div className='item-detail'>
 
