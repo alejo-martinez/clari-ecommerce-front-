@@ -62,6 +62,7 @@
 
 .div-info p{
     margin-top: 15px;
+    text-align: center;
 }
 
 .span-stock{
@@ -129,6 +130,12 @@
     margin-top: 8px;
 }
 
+.div-colors{
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 4px;
+}
+
 .input-quantity-add{
     margin: 0 5px;
 }
@@ -140,8 +147,9 @@
 .item-detail{
     display: flex;
     flex-flow: column nowrap;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     width: 30%;
+    align-items: center;
 }
 
 @media screen and (max-width: 1039px) {

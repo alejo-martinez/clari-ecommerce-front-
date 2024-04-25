@@ -135,6 +135,8 @@ const ProdProvider = ({ children }) => {
     //     setCurrentPage(newPage)
     //   }
 
+    const colorCodes = {azul: '#0000ff', rojo: '#ff0000'};
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
@@ -157,7 +159,7 @@ const ProdProvider = ({ children }) => {
       }, [currentPage])
     
     return (
-        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage, setBack, setCurrentPage, setNext, currentPage, back, next }}>
+        <productContext.Provider value={{ getAllProds, createProd, getBySubCategory, deleteProduct, products, setProducts, getById, updateProd, getAll, updateImage, setBack, setCurrentPage, setNext, currentPage, back, next, colorCodes }}>
             {loading? <p>Cargando...</p> : children}
         </productContext.Provider>
     )

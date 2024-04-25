@@ -17,16 +17,18 @@ import "slick-carousel/slick/slick-theme.css";
 
 function ItemDetail() {
     const { addProduct } = useCart();
-    const { getById } = useProd();
+    const { getById, colorCodes } = useProd();
     const { usuario, setPrevLocation } = useAuth();
 
     const { pid } = useParams();
-    
+
     const [loading, setLoading] = useState(true);
     const [prod, setProd] = useState(null);
     const [error, setError] = useState(null);
-    const [variant, setVariant] = useState(null)
-    const [sizes, setSizes] = useState(null);
+    const[variant, setVariant] = useState(null);
+    // const [variants, setVariants] = useState(null)
+    const [size, setSize] = useState(null);
+    // const [sizes, setSizes] = useState(null);
 
     const [quantity, setQuantity] = useState(0);
 
@@ -71,14 +73,24 @@ function ItemDetail() {
         }
     }
 
+    const setearVariant = (i) =>{
+        setVariant(prod.variants[i]);
+        setSize(prod.variants[i].sizes[0]);
+    }
+
+    const setearSize = (i) =>{
+        setSize(variant.sizes[i]);
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const resp = await getById(pid);
             if (resp.status === 'succes') {
                 setProd(resp.payload);
                 setVariant(resp.payload.variants[0]);
-                setSizes(resp.payload.variants[0].sizes);
+                setSize(resp.payload.variants[0].sizes[0]);
                 setLoading(false);
+
             }
             if (resp.status === 'error') {
                 console.log(resp.error);
@@ -126,14 +138,40 @@ function ItemDetail() {
                                 <h3>{prod.title}</h3>
                                 <p>{prod.description}</p>
                             </div>
+                            <div className='container-colors'>
+                                <h5>Colores disponibles:</h5>
+                                <div className='div-colors'>
+
+                                {prod.variants.map((variant, index) => {
+                                    return (
+                                        <div key={`color${index}`}>
+                                            <button style={{background: colorCodes[variant.color]}} onClick={()=> setearVariant(index)}>{variant.color}</button>
+                                        </div>
+                                    )
+                                })}
+                                </div>
+                            </div>
+                            <div className='div-sizes'>
+                                <h5>Talles disponibles:</h5>
+                                <div>
+                                    {variant.sizes.map((size, i)=>{
+                                        return(
+
+                                            <div key={`size${i}`}>
+                                            <button onClick={()=> setearSize(i)}>{size.size}</button>
+                                        </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
                             <div className='div-numbers'>
                                 <div className='div-numbers-props'>
                                     <div className='item-prop'>
-                                        <span className='span-price'>${prod.price}</span>
+                                        <span className='span-price'>${size.price}</span>
                                     </div>
-                                    {prod.stock !== 0 ?
+                                    {size.stock !== 0 ?
                                         <div className='item-prop'>
-                                            <span className='span-stock'>Stock: {prod.stock}</span>
+                                            <span className='span-stock'>Stock: {size.stock}</span>
                                             {(usuario && usuario.rol === 'client') || !usuario ?
                                                 <div className='item-prop'>
                                                     <label>Cantidad:</label>
