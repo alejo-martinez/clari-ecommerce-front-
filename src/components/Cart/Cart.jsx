@@ -116,6 +116,7 @@ function Cart() {
     const fetchData = async () => {
       const resp = await getProductsCart(cid);
       if (resp.status === 'succes') {
+        
         const prods = resp.payload.products;
         let amount = 0;
         let totalProds = 0;
@@ -123,7 +124,9 @@ function Cart() {
           for (let index = 0; index < prods.length; index++) {
             const element = prods[index];
             totalProds += element.quantity;
-            amount += (element.quantity * element.product.price);
+            const variant = element.product.variants.find(item => item.color === element.color);
+            const size = variant.sizes.find(item => item.size === element.size);
+            amount += (element.quantity * size.price);
           }
         }
         setTotal(amount);
@@ -193,8 +196,8 @@ function Cart() {
                         </div>
                       </div>
                       <div className='div-price-cart'>
-                        <span>Precio unitario: ${prod.product.price}</span>
-                        <span>Precio total: ${prod.product.price * prod.quantity}</span>
+                        <span>Precio unitario: ${prod.price}</span>
+                        <span>Precio total: ${prod.price * prod.quantity}</span>
                       </div>
                       <div className='div-btn-remove'>
                         <button className='btn-remove-prod' onClick={() => removeProductCart(prod.product._id, prod.quantity)} title='Quitar del carrito'>

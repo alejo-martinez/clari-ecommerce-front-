@@ -144,6 +144,12 @@
     cursor: pointer;
 }
 
+.btn-opt-color{
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+}
+
 .item-detail{
     display: flex;
     flex-flow: column nowrap;

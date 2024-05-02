@@ -41,7 +41,7 @@ function ItemDetail() {
     }
 
     const handleIncrement = () => {
-        setQuantity(prevValue => (prevValue === prod.stock ? prevValue : prevValue + 1));
+        setQuantity(prevValue => (prevValue === size.stock ? prevValue : prevValue + 1));
     };
 
     const handleDecrement = () => {
@@ -54,7 +54,7 @@ function ItemDetail() {
             navigation('/login');
         }
         else {
-            const obj = { idProd: prod._id, quantity: quantity }
+            const obj = { idProd: prod._id, quantity: quantity, color: variant.color, size: size.size }
             const resp = await addProduct(usuario.cart, obj);
 
             if (resp.status === 'succes') {
@@ -63,12 +63,12 @@ function ItemDetail() {
                 setQuantity(0);
             }
             if (resp.status === 'error') {
-                if (resp.error === 'Missing data') {
-                    setError('Especifica una cantidad');
-                }
-                else {
+                // if (resp.error === 'Missing data') {
+                //     setError('Especifica una cantidad');
+                // }
+                // else {
                     setError(resp.error);
-                }
+                // }
             }
         }
     }
@@ -145,7 +145,7 @@ function ItemDetail() {
                                 {prod.variants.map((variant, index) => {
                                     return (
                                         <div key={`color${index}`}>
-                                            <button style={{background: colorCodes[variant.color]}} onClick={()=> setearVariant(index)}>{variant.color}</button>
+                                            <button className='btn-opt-color' style={{background: colorCodes[variant.color]}} onClick={()=> setearVariant(index)}></button>
                                         </div>
                                     )
                                 })}
