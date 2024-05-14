@@ -1,5 +1,5 @@
 .div-prod-edit{
-    display: flex;
+    /* display: flex;
     flex-flow: column wrap;
     max-width: 500px;
     height: 700px;
@@ -8,14 +8,33 @@
     padding: 8px;
     border-radius: 8px;
     margin-bottom: 2rem;
-    justify-content: space-around;
+    justify-content: space-around; */
+    display: grid;
+    grid-template-areas: 
+    "img variant"
+    "title variant"
+    "description variant";
+}
+
+.title{
+    grid-area: title;
+}
+
+.description{
+    grid-area: description;
+}
+
+.img{
+    grid-area: img;
 }
 
 .div-prop{
-    display: grid;
+    /* display: grid;
     grid-template-columns: 33% 67%;
-    margin: 8px 0;
-    
+    margin: 8px 0; */
+    display: flex;
+    flex-flow: column nowrap;
+    border: 1px solid black;
 }
 
 .span-prop{
@@ -62,9 +81,12 @@
 }
 
 .div-prop-img{
-    display: grid;
-    grid-template-columns: 90% 10%;
+    display: flex;
+
+    /* display: grid; */
+    /* grid-template-columns: 90% 10%; */
     margin-top: 8px;
+    margin: auto;
 }
 
 .btn-back{

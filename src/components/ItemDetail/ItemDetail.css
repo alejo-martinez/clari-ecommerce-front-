@@ -130,11 +130,6 @@
     margin-top: 8px;
 }
 
-.div-colors{
-    display: flex;
-    flex-flow: row nowrap;
-    gap: 4px;
-}
 
 .input-quantity-add{
     margin: 0 5px;
@@ -156,6 +151,39 @@
     /* justify-content: space-around; */
     width: 30%;
     align-items: center;
+}
+
+.active{
+    border: 1px solid black;
+}
+
+.container-colors{
+
+}
+
+.container-sizes{
+
+}
+
+.div-colors{
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.div-sizes{
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+}
+
+.div-btn-color{
+    display: flex;
+}
+
+.div-btn-sizes{
+
 }
 
 @media screen and (max-width: 1039px) {

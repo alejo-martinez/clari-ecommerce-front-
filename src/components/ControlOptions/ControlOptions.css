@@ -25,6 +25,96 @@
     margin: 10px 0;
 }
 
+.div-input-form-variant{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.div-input-color{
+    display: flex;
+    flex-flow: column nowrap;
+    background-color: grey;
+    justify-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+
+.div-form-color label{
+    color: #fff;
+    font-weight: bold;
+}
+
+.div-input-size{
+    display: flex;
+    flex-flow: column wrap;
+    gap: 7px;
+    /* border: 1px solid black; */
+    width: 70%;
+    margin: auto;
+    margin-top: 10px;
+    background-color: black;
+    border-radius: 6px;
+    padding: 8px;
+    /* justify-items: center; */
+}
+
+.btn-add-variant{
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    border: none;
+    background-color: #0a3f53;
+    color: #fff;
+    font-weight: bold;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-delete-variant{
+    width: fit-content;
+    border: none;
+    color: red;
+    background-color: transparent;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.btn-add-size{
+    border: none;
+    background: #0a3f53;
+    color: #fff;
+    padding: 4px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.div-form-color{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    width: 60%;
+}
+
+.container-color{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.div-size-value{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin: auto;
+    color: #fff;
+    font-weight: bold;
+}
+
 .div-input-form label {
     width: 100%;
     margin-bottom: 5px;

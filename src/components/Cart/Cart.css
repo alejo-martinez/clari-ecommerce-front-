@@ -7,13 +7,22 @@
     margin: 8px;
     align-items: center;
     justify-content: space-between;
+    width: 80%;
+}
+
+.div-info-prod{
+    display: flex;
+    flex-flow: column nowrap;
+    /* width: fit-content; */
 }
 
 .div-cart{ /* estilos del div que contiene todos los productos en el carrito */
     display: flex;
     flex-flow: column wrap;
     width: 70%;
-    justify-items: center;
+    /* justify-items: center;
+    justify-content: center; */
+    align-items: center;
 }
 
 .div-resume{ /* estilos del div que contiene la info de pago */
@@ -40,6 +49,7 @@
 .div-quantity{ /* estilos del div que tiene la cantidad del producto con sus botones */
     display: flex;
     flex-flow: row nowrap;
+    /* flex: 1; */
 }
 
 .input-quantity{ /* estilos del input que muestra la cantidad de producto */
@@ -85,7 +95,8 @@
 }
 
 .prod-title{ /* estilos para el titulo de los productos */
-    width: 145px;
+    /* width: 145px; */
+    font-weight: bold;
 }
 
 .div-total{ /* estilos del div con la cantidad de productos y el monto total */
@@ -147,12 +158,15 @@
 }
 
 .div-btn-remove{
-    align-self: flex-start;
+    text-align: center;
+    margin-top: 4px;
 }
 
 .btn-remove-prod{
     border: none;
     cursor: pointer;
+    background-color: transparent;
+    color: rgb(41, 41, 175);
 }
 
 .div-btns-pay{

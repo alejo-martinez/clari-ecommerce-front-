@@ -58,7 +58,7 @@ function OptionUpdate() {
                                     </div>
 
                                     <div className=''>
-                                        <img className='img-update' src={prod.imageUrl} height={150} width={150} />
+                                        <img className='img-update' src={prod.imagesUrl[0]} height={150} width={150} />
                                     </div>
 
                                     <div className='div-prod-prop'>

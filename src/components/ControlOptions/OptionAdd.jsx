@@ -3,6 +3,9 @@ import { toast } from 'react-toastify';
 
 import { useProd } from '../context/ProductContext';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
+
 import './ControlOptions.css';
 
 function OptionAdd() {
@@ -10,7 +13,6 @@ function OptionAdd() {
 
     const [producto, setProducto] = useState({ title: '', description: '', files: [], variants: [], category: '' });
     const [error, setError] = useState(null);
-
 
     const { createProd } = useProd();
 
@@ -29,7 +31,7 @@ function OptionAdd() {
     }
 
     const handleImg = (e) => {
-        const filesArray = Array.from(e.target.files); 
+        const filesArray = Array.from(e.target.files);
         setProducto({ ...producto, files: filesArray });
     }
 
@@ -51,16 +53,16 @@ function OptionAdd() {
         const { name, value } = e.target;
         const variants = [...producto.variants];
         variants[i][name] = value;
-        setProducto({ ...producto, variants: JSON.parse(JSON.stringify(variants)) }); 
+        setProducto({ ...producto, variants: JSON.parse(JSON.stringify(variants)) });
     }
-    
+
     const handleSize = (e, i, index) => {
         const { name, value } = e.target;
         const variants = [...producto.variants];
         const sizes = [...variants[index].sizes];
         sizes[i][name] = value;
         variants[index].sizes = sizes;
-        setProducto({ ...producto, variants: JSON.parse(JSON.stringify(variants)) }); 
+        setProducto({ ...producto, variants: JSON.parse(JSON.stringify(variants)) });
     }
 
     const addSize = (index) => {
@@ -75,7 +77,19 @@ function OptionAdd() {
         prod.variants.push({ color: "", sizes: [] })
         setProducto(prod);
     }
-   
+
+    const deleteVariant = (i) => {
+        const prod = { ...producto };
+        prod.variants.splice(i, 1);
+        setProducto(prod);
+    }
+
+    const deleteSize = (i, index) =>{
+        const prod = {...producto};
+        prod.variants[index].sizes.splice(i, 1);
+        setProducto(prod)
+    }
+
 
     return (
         <div className='body-add'>
@@ -104,37 +118,47 @@ function OptionAdd() {
                             <option value="articulos">Artículos</option>
                         </select>
                     </div>
-                    <div className='div-input-form'>
-                        <button type='button' onClick={addVariant}>Agregar talle</button>
-                        {producto.variants.map((el, index) => {
-                            return (
-                                <div key={`el${index}`}>
-                                    <label>Color</label>
-                                    <input type="text" name='color' onChange={(e) => handleVariant(e, index)} />
-                                    <button type='button' onClick={() => addSize(index)}>+ talle</button>
-                                    {el.sizes.map((size, i) => {
-                                        return (
-                                            <div key={`sizeNro${i}`}>
-                                                <div>
-                                                    <label>Talle</label>
-                                                    <input type="text" name='size' onChange={(e) => handleSize(e, i, index)} />
-                                                </div>
-                                                <div>
-                                                    <label>Stock</label>
-                                                    <input type="number" name='stock' onChange={(e) => handleSize(e, i, index)} />
-                                                </div>
-                                                <div>
-                                                    <label>Precio</label>
-                                                    <input type="number" name='price' onChange={(e) => handleSize(e, i, index)} />
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            );
-                        })}
-                    </div>
                 </form>
+                <div className='div-input-form-variant'>
+                    <button type='button' onClick={addVariant} className='btn-add-variant'>Agregar variante</button>
+                    {producto.variants.map((el, index) => {
+                        return (
+                            <div key={`el${index}`} className='div-input-color'>
+                                <button className='btn-delete-variant' onClick={() => deleteVariant(index)}>
+                                    <FontAwesomeIcon icon={faMinus} />
+                                </button>
+                                <div className='container-color'>
+                                    <div className='div-form-color'>
+                                        <label>Color</label>
+                                        <input type="text" name='color' value={el.color} onChange={(e) => handleVariant(e, index)} />
+                                    </div>
+                                    <button type='button' onClick={() => addSize(index)} className='btn-add-size'>+ talle</button>
+                                </div>
+                                {el.sizes.map((size, i) => {
+                                    return (
+                                        <div key={`sizeNro${i}`} className='div-input-size'>
+                                            <button className='btn-delete-variant' onClick={() => deleteSize(i, index)}>
+                                                <FontAwesomeIcon icon={faMinus} />
+                                            </button>
+                                            <div className='div-size-value'>
+                                                <label>Talle</label>
+                                                <input type="text" name='size' value={size.size} onChange={(e) => handleSize(e, i, index)} />
+                                            </div>
+                                            <div className='div-size-value'>
+                                                <label>Stock</label>
+                                                <input type="number" name='stock' onChange={(e) => handleSize(e, i, index)} />
+                                            </div>
+                                            <div className='div-size-value'>
+                                                <label>Precio</label>
+                                                <input type="number" name='price' onChange={(e) => handleSize(e, i, index)} />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
                 <button className='btn-create' onClick={handleSubmit}>Crear producto</button>
 
                 <p className='error'>{error && `${error}`}</p>

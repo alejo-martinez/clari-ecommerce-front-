@@ -25,10 +25,8 @@ function ItemDetail() {
     const [loading, setLoading] = useState(true);
     const [prod, setProd] = useState(null);
     const [error, setError] = useState(null);
-    const[variant, setVariant] = useState(null);
-    // const [variants, setVariants] = useState(null)
+    const [variant, setVariant] = useState(null);
     const [size, setSize] = useState(null);
-    // const [sizes, setSizes] = useState(null);
 
     const [quantity, setQuantity] = useState(0);
 
@@ -67,18 +65,18 @@ function ItemDetail() {
                 //     setError('Especifica una cantidad');
                 // }
                 // else {
-                    setError(resp.error);
+                setError(resp.error);
                 // }
             }
         }
     }
 
-    const setearVariant = (i) =>{
+    const setearVariant = (i, v) => {
         setVariant(prod.variants[i]);
         setSize(prod.variants[i].sizes[0]);
     }
 
-    const setearSize = (i) =>{
+    const setearSize = (i) => {
         setSize(variant.sizes[i]);
     }
 
@@ -142,24 +140,24 @@ function ItemDetail() {
                                 <h5>Colores disponibles:</h5>
                                 <div className='div-colors'>
 
-                                {prod.variants.map((variant, index) => {
-                                    return (
-                                        <div key={`color${index}`}>
-                                            <button className='btn-opt-color' style={{background: colorCodes[variant.color]}} onClick={()=> setearVariant(index)}></button>
-                                        </div>
-                                    )
-                                })}
+                                    {prod.variants.map((v, index) => {
+                                        return (
+                                            <div key={`color${index}`} className={variant.color === v.color? 'active div-btn-color' : 'div-btn-color'}>
+                                                <button className='btn-opt-color' onClick={() => setearVariant(index)}>{v.color}</button>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </div>
-                            <div className='div-sizes'>
+                            <div className='container-sizes'>
                                 <h5>Talles disponibles:</h5>
-                                <div>
-                                    {variant.sizes.map((size, i)=>{
-                                        return(
+                                <div className='div-sizes'>
+                                    {variant.sizes.map((s, i) => {
+                                        return (
 
-                                            <div key={`size${i}`}>
-                                            <button onClick={()=> setearSize(i)}>{size.size}</button>
-                                        </div>
+                                            <div key={`size${i}`} className='div-btn-sizes'>
+                                                <button onClick={() => setearSize(i)}>{s.size}</button>
+                                            </div>
                                         )
                                     })}
                                 </div>

@@ -26,6 +26,7 @@ import { ProdProvider } from '../context/ProductContext.js';
 import { CartProvider } from '../context/CartContext.js';
 import { MpProvider } from '../context/MpContext.js';
 import { UserProvider } from '../context/UserContext.js';
+import { GetnetProvider } from '../context/GetnetContext.js';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -36,38 +37,40 @@ function App() {
     <>
       <AuthProvider>
         <UserProvider>
-          <ProdProvider>
-            <MpProvider>
-              <CartProvider>
-                <BrowserRouter>
-                  <Navbar />
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/subcategory/:subcategory" element={<ProductCategory />} />
-                    <Route path="/itemdetail/:pid" element={<ItemDetail />} />
-                    <Route path="/resetpass/:uid" element={<ResetPass />} />
-                    <Route path="/sendmail" element={<SendMail />} />
-                    <Route element={<AuthRoute />}>
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                    </Route>
-                    <Route element={<LoguedRoute />}>
-                      <Route path="/profile" element={<Profile />} />
-                    </Route>
-                    <Route element={<ClientRoute />}>
-                      <Route path="/cart/:cid" element={<Cart />} />
-                    </Route>
-                    <Route element={<AdminRoute />}>
-                      <Route element={<ControlPanel />} path="/controlpanel" />
-                      <Route path="/ticketdetail/:tid" element={<TicketDetail />} />
-                    </Route>
-                    <Route path='*' element={<h2>Pagina no encontrada</h2>} />
-                  </Routes>
-                  <ToastContainer />
-                </BrowserRouter>
-              </CartProvider>
-            </MpProvider>
-          </ProdProvider>
+          <GetnetProvider>
+            <ProdProvider>
+              <MpProvider>
+                <CartProvider>
+                  <BrowserRouter>
+                    <Navbar />
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/subcategory/:subcategory" element={<ProductCategory />} />
+                      <Route path="/itemdetail/:pid" element={<ItemDetail />} />
+                      <Route path="/resetpass/:uid" element={<ResetPass />} />
+                      <Route path="/sendmail" element={<SendMail />} />
+                      <Route element={<AuthRoute />}>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                      </Route>
+                      <Route element={<LoguedRoute />}>
+                        <Route path="/profile" element={<Profile />} />
+                      </Route>
+                      <Route element={<ClientRoute />}>
+                        <Route path="/cart/:cid" element={<Cart />} />
+                      </Route>
+                      <Route element={<AdminRoute />}>
+                        <Route element={<ControlPanel />} path="/controlpanel" />
+                        <Route path="/ticketdetail/:tid" element={<TicketDetail />} />
+                      </Route>
+                      <Route path='*' element={<h2>Pagina no encontrada</h2>} />
+                    </Routes>
+                    <ToastContainer />
+                  </BrowserRouter>
+                </CartProvider>
+              </MpProvider>
+            </ProdProvider>
+          </GetnetProvider>
         </UserProvider>
       </AuthProvider>
     </>
