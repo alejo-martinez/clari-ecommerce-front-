@@ -1,4 +1,4 @@
-import { useContext, createContext } from "react";
+import { useContext, createContext, useState } from "react";
 
 const mpContext = createContext();
 
@@ -12,6 +12,9 @@ const useMp = ()=>{
 
 const MpProvider = ({children})=>{
 
+    const [prodsCookie, setProdsCookie] = useState([]);
+    const [userCookie, setUserCookie] = useState(null);
+
     const crearPreferencia = async()=>{
         try {
             const response = await fetch(`${apiUrl}/mercadopago`,{
@@ -19,7 +22,8 @@ const MpProvider = ({children})=>{
                 credentials:'include',
                 headers:{
                     'Content-Type':'application/json'
-                }
+                },
+                body:JSON.stringify({userCookie})
             });
             
             const json = await response.json();
@@ -31,7 +35,7 @@ const MpProvider = ({children})=>{
 
 
     return(
-        <mpContext.Provider value={{ crearPreferencia}}>
+        <mpContext.Provider value={{ crearPreferencia, setProdsCookie, prodsCookie, setUserCookie}}>
             {children}
         </mpContext.Provider>
     )

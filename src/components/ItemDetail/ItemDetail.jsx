@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import Slider from 'react-slick';
+import Cookies from 'js-cookie';
 
 import Arrow from '../CustomArrows/Arrow';
 
@@ -18,7 +19,7 @@ import "slick-carousel/slick/slick-theme.css";
 function ItemDetail() {
     const { addProduct } = useCart();
     const { getById, colorCodes } = useProd();
-    const { usuario, setPrevLocation } = useAuth();
+    const { usuario, setPrevLocation, setCart, cart } = useAuth();
 
     const { pid } = useParams();
 
@@ -28,10 +29,9 @@ function ItemDetail() {
     const [variant, setVariant] = useState(null);
     const [size, setSize] = useState(null);
 
-    const [quantity, setQuantity] = useState(0);
+    // console.log(prod)
 
-    const navigation = useNavigate();
-    const location = useLocation();
+    const [quantity, setQuantity] = useState(0);
 
     const handleQuantity = (e) => {
         const inputValue = e.target.value.replace(/[^0-9]/g, '');
@@ -47,13 +47,40 @@ function ItemDetail() {
     };
 
     const handleAdd = async () => {
+        const obj = { idProd: prod._id, quantity: quantity, color: variant.color, size: size.size }
+
         if (!usuario) {
-            setPrevLocation(location.pathname);
-            navigation('/login');
+            const newCart = {...cart};
+            const finded = newCart.products.findIndex(it => it.product === obj.idProd && it.variant.color === obj.color && it.variant.size === obj.size);
+            
+            if(finded !== -1){ //El producto está en el carrito y debemos aumentar su cantidad
+                const validStock = Number(newCart.products[finded].quantity) + Number(obj.quantity);
+                        if(size.stock < validStock){
+                            toast.error('No hay suficiente stock', { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+                        } else{
+                            newCart.products[finded].quantity = validStock;
+                            setCart(newCart);
+                            Cookies.set('shop_cart', JSON.stringify(newCart), {expires: 7});
+                            toast.success('Agregado al carrito!', { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+                            setQuantity(0);
+                        }
+
+            }
+            if(finded === -1){ //El producto no está en el carrito
+                if(size.stock < obj.quantity){
+                    toast.error('No hay suficiente stock', { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+                } else{
+                    const carrito = {...cart}
+                    carrito.products.push({product: obj.idProd, variant:{color: obj.color, size: obj.size}, quantity: obj.quantity, unitPrice: size.price})
+                    Cookies.set('shop_cart', JSON.stringify(carrito), {expires: 7});
+                    toast.success('Agregado al carrito!', { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+                    setQuantity(0);
+                }
+            }
         }
         else {
-            const obj = { idProd: prod._id, quantity: quantity, color: variant.color, size: size.size }
-            const resp = await addProduct(usuario.cart, obj);
+            //MANEJAR AGREGADO DE PRODUCTOS CUANDO HAY USER
+            const resp = await addProduct(usuario.cart._id, obj);
 
             if (resp.status === 'succes') {
                 if (error) setError(null);
@@ -61,12 +88,7 @@ function ItemDetail() {
                 setQuantity(0);
             }
             if (resp.status === 'error') {
-                // if (resp.error === 'Missing data') {
-                //     setError('Especifica una cantidad');
-                // }
-                // else {
                 setError(resp.error);
-                // }
             }
         }
     }
@@ -155,8 +177,8 @@ function ItemDetail() {
                                     {variant.sizes.map((s, i) => {
                                         return (
 
-                                            <div key={`size${i}`} className='div-btn-sizes'>
-                                                <button onClick={() => setearSize(i)}>{s.size}</button>
+                                            <div key={`size${i}`} className={size.size === s.size? 'div-btn-sizes active' : 'div-btn-sizes'}>
+                                                <button className='btn-opt-color' onClick={() => setearSize(i)}>{s.size}</button>
                                             </div>
                                         )
                                     })}

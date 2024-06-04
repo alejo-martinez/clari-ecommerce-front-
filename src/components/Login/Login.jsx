@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
+
 import { Link, useNavigate } from 'react-router-dom';
 import {toast} from 'react-toastify';
+
+import Cookies from 'js-cookie';
 
 function Login() {
     const [user, setUser] = useState({ email: '', password: '' });
     const [error, setError] = useState(null);
 
     const {login, prevLocation, setUsuario, setIsAuth} = useAuth();
+    const {updateCart} = useCart();
 
     const navigate = useNavigate();
 
@@ -18,13 +23,23 @@ function Login() {
     }
 
     const handleLogin = async()=>{
+            const cookie = Cookies.get('shop_cart');
             const response = await login(user);
             if(response.status === 'succes'){
+                // if(cookie && cookie.products.length !== 0){
+                //     await updateCart(response.payload.cart._id, cookie.products);
+                // }
+                // console.log(response)
+                // console.log(JSON.parse(cookie))
+                if(cookie) Cookies.remove('shop_cart');
                 setUsuario(response.payload);
                 setIsAuth(true);
                 toast.success(response.message,{position:"top-center", autoClose:1300, hideProgressBar:true, closeOnClick:true, closeButton:true, pauseOnHover:false});
                 setError('');
-                if(prevLocation) navigate(prevLocation);
+                if(prevLocation){
+                    if(prevLocation.includes("endpurchase")) navigate('/')
+                    else  navigate(prevLocation);
+                }
                 else navigate('/');
             }
             if(response.status === 'error'){

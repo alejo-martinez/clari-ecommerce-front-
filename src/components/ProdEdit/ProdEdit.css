@@ -74,6 +74,15 @@
     margin: 4rem 0;
 }
 
+.div-each-variant{
+    border: 1px solid black;
+}
+
+.div-each-size{
+    background-color: #fff;
+    border: 1px solid black;
+}
+
 .div-span-value{
     display: grid;
     grid-template-columns: 90% 10%;

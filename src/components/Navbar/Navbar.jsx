@@ -9,15 +9,17 @@ import SearchBar from '../SearchBar/SearchBar';
 import { useAuth } from '../context/AuthContext';
 import { useProd } from '../context/ProductContext';
 
+import Cookies from 'js-cookie';
+import {v4 as uuidv4} from 'uuid';
+
 import './Navbar.css';
 
 function Navbar() {
 
-    const { usuario, logout, setPrevLocation, current, setUsuario, setLoading } = useAuth();
+    const { usuario, logout, setPrevLocation, current, setUsuario, setLoading, cart, setCart } = useAuth();
 
     const navigation = useNavigate();
     const location = useLocation();
-
     const goLogin = ()=>{
         setPrevLocation(location.pathname);
         navigation('/login');
@@ -27,8 +29,12 @@ function Navbar() {
         const response = await logout();
         const ubication = location.pathname;
         if (response.status === 'succes') {
+            const newCart = {_id: uuidv4(), products: []}
+            Cookies.set('shop_cart', JSON.stringify(newCart), {expires: 7});
             toast.success(response.message, { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover:false });
+            setCart(newCart)
             if (location.pathname === "/controlpanel") navigation("/");
+            if(location.pathname.includes('/cart')) navigation("/")
             else navigation(ubication);
         }
         if (response.status === 'error') {
@@ -43,7 +49,7 @@ function Navbar() {
                     <div className='nav-sup'>
                         <div className='div-img-inicio'>
                             <Link to={"/"}>
-                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/clara+logo+03.png" alt="" width={150} height={94} className='img-inicio'/>
+                                <img src="https://claraimgprods.s3.us-east-2.amazonaws.com/logo.jpeg" alt="" width={150} height={150} className='img-inicio'/>
                             </Link>
                         </div>
                         <div className='div-searchbar'>
@@ -55,11 +61,11 @@ function Navbar() {
                                     <div className='panel-user-true'>
                                         <div className='panel-user-true-links'>
                                             <Link to={"/profile"}>
-                                                <FontAwesomeIcon icon={faUser} className='btn-user'/>
+                                                <FontAwesomeIcon icon={faUser} color='white' className='btn-user'/>
                                             </Link>
                                             {usuario.rol === 'client' ?
-                                                <Link to={`/cart/${usuario.cart}`}>
-                                                    <FontAwesomeIcon icon={faCartShopping} className='link-panel'/>
+                                                <Link to={`/cart/${usuario.cart._id}`}>
+                                                    <FontAwesomeIcon icon={faCartShopping} color='#fff' className='link-panel'/>
                                                 </Link>
                                                 :
                                                 ''
@@ -78,6 +84,7 @@ function Navbar() {
                                 <div className='links-nav'>
                                     <button onClick={goLogin} className='buttonlink-login'>Iniciar sesión</button>
                                     <Link to={"/register"} className='link link-register'>Registrarse</Link>
+                                    <Link to={`/cart/${cart._id}`}><FontAwesomeIcon icon={faCartShopping}/></Link>
                                 </div>
                             }
                         </div>

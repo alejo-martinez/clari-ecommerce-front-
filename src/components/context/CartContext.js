@@ -62,6 +62,19 @@ const CartProvider = ({children}) =>{
         }
     }
 
+    const updateCart = async(cid, prods)=>{
+        const response = await fetch(`${apiUrl}/cart/update/${cid}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({productos: prods})
+        })
+        const json = await response.json();
+        return json;
+    }
+
     const emptyCart = async(cid)=>{
         try {
             const response = await fetch(`${apiUrl}/cart/${cid}`,{
@@ -159,7 +172,7 @@ const CartProvider = ({children}) =>{
     }
 
     return(
-        <cartContext.Provider value={{getProductsCart, addProduct, removeProd, emptyCart, getTicketByPreference, getAllTickets, getTicketById, createTicket, approveTicket, deleteTicket}}>
+        <cartContext.Provider value={{getProductsCart, addProduct, removeProd, emptyCart, getTicketByPreference, getAllTickets, getTicketById, createTicket, approveTicket, deleteTicket, updateCart}}>
             {children}
         </cartContext.Provider>
     )

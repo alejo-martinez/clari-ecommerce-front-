@@ -7,9 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faSquareMinus } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
+import Cookies from 'js-cookie';
+
+import { sendMessage } from '../../assets/sendMessageWsp';
 
 //Context del carrito
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { useProd } from '../context/ProductContext';
+import { useMp } from '../context/MpContext';
 
 //Componente de pago
 import PagoComponent from '../PagoComponent/PagoComponent';
@@ -20,10 +26,14 @@ import './Cart.css';
 Modal.setAppElement('#root');
 
 function Cart() {
+  const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
   const { cid } = useParams(); //Id del carrito llegado por parámetro de la ruta
+  const { cart, usuario } = useAuth();
+  const { setProdsCookie } = useMp();
+  const { getById } = useProd();
 
   const { getProductsCart, addProduct, removeProd, emptyCart, createTicket } = useCart(); //Funciones del contextodel carrito
 
@@ -33,65 +43,152 @@ function Cart() {
   const [cantProds, setCantProds] = useState(0); // Estado de la cantidad de productos totales a comprar
   const [end, setEnd] = useState(false); // Estado que determina el renderizado del componente de pago
   const [payStatus, setPayStatus] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState({payment_method: ''});
 
   // const [mpPay, setMpPay] = useState(null);
   // const [cashPay, setCashPay] = useState(null);
 
+  const whatsAppRedirect = async() => {
+    let quantity = 0;
+    let amount = 0;
+    // let userCookie;
+    // if(usuario) userCookie = usuario;
+    // if(!usuario) userCookie = user;
+    products.forEach(p =>{
+      quantity += Number(p.quantity);
+      amount += (Number(p.quantity) * Number(p.unitPrice));
+    });
+    const objData = {products: products, quantity: quantity, amount: amount, payment_method: paymentMethod.payment_method, status: 'pending', userCookie: usuario};
+    const resp = await createTicket(objData);
+    if(resp.status === 'success'){
 
-  const increase = async (pid, id, color, size) => { // Función para incrementar la cantidad de un producto. Al estar dentro 
-    const body = { idProd: pid, quantity: 1, color: color, size: size } // del componente "carrito" solo incrementa los productos que ya estén 
-    const resp = await addProduct(cid, body); // dentro del mismo. El límite del agregado depende del stock del 
-    if (resp.status === 'succes') { // producto.
-      let newArray = [...products];
-      let newTotal = total;
-      let newTotalProds = cantProds;
-      let prod = products.find(prod => prod._id === id);
-      prod.quantity += 1;
-      newArray.map(producto => producto._id === id ? prod : producto);
-      newTotal += prod.unitPrice;
-      newTotalProds += 1;
+      const nroTel = '543424777555';
+      const msg = sendMessage(usuario, products, paymentMethod.payment_method);
+      const msgCodificado = encodeURIComponent(msg);
+      const url = `https://api.whatsapp.com/send?phone=${nroTel}&text=${msgCodificado}`;
+      window.location.href = url;
+    }
+  }
+
+  const endPurchaseWithCookie = () => {
+    setProdsCookie(products);
+    navigate('/endpurchase', { state: { prods: products, cid: cid } });
+  }
+
+  const increase = async (pid, id, color, size) => { // Función para incrementar la cantidad de un producto. Al estar dentro del componente "carrito" solo incrementa los productos que ya estén dentro del mismo. El límite del agregado depende del stock del producto.
+    const cookieExist = Cookies.get('shop_cart');
+    const body = { idProd: pid, quantity: 1, color: color, size: size }
+    if (!cookieExist) {
+
+      const resp = await addProduct(cid, body);
+      if (resp.status === 'succes') {
+        let newArray = [...products];
+        let newTotal = total;
+        let newTotalProds = cantProds;
+        let prod = products.find(prod => prod._id === id);
+        prod.quantity += 1;
+        newArray.map(producto => producto._id === id ? prod : producto);
+        newTotal += prod.unitPrice;
+        newTotalProds += 1;
+        setTotal(newTotal);
+        setCantProds(newTotalProds);
+        setProducts(newArray);
+      }
+    } else {
+      const carrito = JSON.parse(cookieExist);
+      const prodsUpdate = [...products];
+      const prodExist = carrito.products.findIndex(p => p.product === pid && p.variant.color === color && p.variant.size === size);
+      const prodUpdate = prodsUpdate.findIndex(p => p.product._id === pid && p.variant.color === color && p.variant.size === size);
+      carrito.products[prodExist].quantity += 1;
+      prodsUpdate[prodUpdate].quantity += 1;
+      const newTotal = Number(total) + Number(prodsUpdate[prodUpdate].unitPrice);
+      const newCantProds = Number(cantProds) + 1;
       setTotal(newTotal);
-      setCantProds(newTotalProds);
-      setProducts(newArray);
+      setCantProds(newCantProds);
+      Cookies.set('shop_cart', JSON.stringify(carrito), { expires: 7 });
     }
   }
 
   const decrease = async (pid, id, color, size) => { // Función para decrementar la cantidad de un producto. Al estar dentro
-    const resp = await removeProd(cid, pid, 1, color, size); // del componente "carrito" solo decrementa los productos que ya
-    if (resp.status === 'succes') { // estén dentro del mismo. El límite de decremento es cuando existe una 
-      let newArray = [...products]; // cantidad de 1 (uno) producto dentro del carrito.
-      let newTotal = total;
-      let newTotalProds = Number(cantProds);
-      let prod = products.find(prod => prod._id === id);
-      prod.quantity -= 1;
-      newArray.map(producto => producto._id === id ? prod : producto);
-      newTotal -= prod.unitPrice;
-      newTotalProds -= 1;
+    const cookieExist = Cookies.get('shop_cart');
+    if (!cookieExist) {
+      const resp = await removeProd(cid, pid, 1, color, size); // del componente "carrito" solo decrementa los productos que ya
+      if (resp.status === 'succes') { // estén dentro del mismo. El límite de decremento es cuando existe una 
+        let newArray = [...products]; // cantidad de 1 (uno) producto dentro del carrito.
+        let newTotal = total;
+        let newTotalProds = Number(cantProds);
+        let prod = products.find(prod => prod._id === id);
+        prod.quantity -= 1;
+        newArray.map(producto => producto._id === id ? prod : producto);
+        newTotal -= prod.unitPrice;
+        newTotalProds -= 1;
+        setTotal(newTotal);
+        setCantProds(newTotalProds);
+        setProducts(newArray);
+      }
+    } else {
+      const carrito = JSON.parse(cookieExist);
+      const prodsUpdate = [...products];
+      const prodExist = carrito.products.findIndex(p => p.product === pid && p.variant.color === color && p.variant.size === size);
+      const prodUpdate = prodsUpdate.findIndex(p => p.product._id === pid && p.variant.color === color && p.variant.size === size);
+      carrito.products[prodExist].quantity -= 1;
+      prodsUpdate[prodUpdate].quantity -= 1;
+      const newTotal = Number(total) - Number(prodsUpdate[prodUpdate].unitPrice);
+      const newCantProds = Number(cantProds) - 1;
       setTotal(newTotal);
+      setCantProds(newCantProds);
+      Cookies.set('shop_cart', JSON.stringify(carrito), { expires: 7 });
+    }
+  }
+
+  const endPurchaseWithoutUser = () => {
+
+  }
+
+  const handleSelect = ({target: {name, value}})=>{
+    setPaymentMethod({[name]: value});
+  }
+
+
+  const removeProductCart = async (pid, quantity, color, size, index, unitPrice) => {
+    const cookieExist = Cookies.get('shop_cart');
+    if (!cookieExist) {
+      const resp = await removeProd(cid, pid, quantity, color, size);
+      if (resp.status === 'succes') {
+        toast.success(resp.message, { autoClose: 2000, closeButton: true, hideProgressBar: true });
+        const newTotalProds = Number(cantProds) - Number(quantity);
+        setCantProds(newTotalProds);
+        const newTotal = Number(total) - (Number(quantity) * Number(unitPrice));
+        const prods = [...products];
+        prods.splice(index, 1);
+        setTotal(newTotal)
+        setProducts(prods);
+      }
+      if (resp.status === 'error') {
+        toast.error(resp.error, { autoClose: 3000, closeButton: true, hideProgressBar: true, pauseOnHover: true });
+      }
+    } else {
+      const carrito = JSON.parse(cookieExist);
+      const prodsUpdate = [...products];
+      const prodsFilter = carrito.products.filter(p => !(p.product === pid && p.variant.color === color && p.variant.size === size));
+
+      const newTotal = Number(total) - (Number(quantity) * Number(unitPrice));
+      const newTotalProds = Number(cantProds) - Number(quantity);
+      const updtArray = prodsUpdate.filter(p => !(p.product._id === pid && p.variant.color === color && p.variant.size === size));
+
+      setProducts(updtArray);
       setCantProds(newTotalProds);
-      setProducts(newArray);
+      setTotal(newTotal);
+      carrito.products = prodsFilter
+      Cookies.set('shop_cart', JSON.stringify(carrito), { expires: 7 })
     }
   }
 
-  const removeProductCart = async (pid, quantity, color, size, index) => {
-    const resp = await removeProd(cid, pid, quantity, color, size);
-    if (resp.status === 'succes') {
-      toast.success(resp.message, { autoClose: 2000, closeButton: true, hideProgressBar: true });
-      const prods = [...products];
-      prods.splice(index, 1);
-      setProducts(prods);
-    }
-    if (resp.status === 'error') {
-      toast.error(resp.error, { autoClose: 3000, closeButton: true, hideProgressBar: true, pauseOnHover: true });
-    }
-  }
-
-  const maxProds = (index, color, size)=>{
-    const findColor = products[index].product.variants.find(item=> item.color === color);
-    if(findColor){
+  const maxProds = (index, color, size) => {
+    const findColor = products[index].product.variants.find(item => item.color === color);
+    if (findColor) {
       const findSize = findColor.sizes.find(i => i.size === size);
-      if(findSize){
-        console.log()
+      if (findSize) {
         return Number(findSize.stock);
       }
     }
@@ -102,10 +199,19 @@ function Cart() {
   }
 
   const vaciarCarrito = async () => { // Función que vacía el carrito.
-    const resp = await emptyCart(cid);
-    if (resp.status === 'succes') {
+    const cookieExist = Cookies.get('shop_cart');
+    if (!cookieExist) {
+      const resp = await emptyCart(cid);
+      if (resp.status === 'succes') {
+        setProducts([]);
+        toast.success(resp.message, { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+      }
+    } else {
+      const carrito = JSON.parse(cookieExist);
+      carrito.products = [];
+      Cookies.set('shop_cart', JSON.stringify(carrito), { expires: 7 });
       setProducts([]);
-      toast.success(resp.message, { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
+      toast.success('Carrito vaciado !', { position: "top-center", autoClose: 1300, hideProgressBar: true, closeOnClick: true, closeButton: true, pauseOnHover: false })
     }
   }
 
@@ -127,28 +233,49 @@ function Cart() {
   useEffect(() => { // useEffect para renderizar los componentes del carrito del usuario logueado y determinar el precio y la cantidad total de productos. Si hay parámetros de pago
 
     const fetchData = async () => {
-      const resp = await getProductsCart(cid);
-      if (resp.status === 'succes') {
-        const prods = resp.payload.products;
-        let amount = 0;
+      const cookieExist = Cookies.get('shop_cart');
+      if (!cookieExist) {
+        const resp = await getProductsCart(cid);
+        if (resp.status === 'succes') {
+          const prods = resp.payload.products;
+          let amount = 0;
+          let totalProds = 0;
+          if (prods.length !== 0) {
+            for (let index = 0; index < prods.length; index++) {
+              const element = prods[index];
+              totalProds += element.quantity;
+              // const variant = element.product.variants.find(item => item.color === element.color);
+              // const size = variant.sizes.find(item => item.size === element.size);
+              amount += (element.quantity * element.unitPrice);
+            }
+          }
+          setTotal(amount);
+          setCantProds(totalProds);
+          setProducts(resp.payload.products);
+
+
+        }
+        if (resp.status === 'error') {
+          console.log(resp.error);
+        }
+      } else {
+        const carrito = JSON.parse(cookieExist);
+        // console.log(carrito)
         let totalProds = 0;
-        if (prods.length !== 0) {
-          for (let index = 0; index < prods.length; index++) {
-            const element = prods[index];
+        let amount = 0;
+        if (carrito.products.length !== 0) {
+          for (let index = 0; index < carrito.products.length; index++) {
+            const element = carrito.products[index];
+            const productoBdd = await getById(element.product);
             totalProds += element.quantity;
-            // const variant = element.product.variants.find(item => item.color === element.color);
-            // const size = variant.sizes.find(item => item.size === element.size);
             amount += (element.quantity * element.unitPrice);
+            if (productoBdd) element.product = productoBdd.payload;
           }
         }
         setTotal(amount);
-        setCantProds(totalProds);
-        setProducts(resp.payload.products);
-        
-
-      }
-      if (resp.status === 'error') {
-        console.log(resp.error);
+        setCantProds(totalProds)
+        setProducts(carrito.products);
+        // console.log(carrito.products)
       }
     }
     const status = searchParams.get('status');
@@ -192,20 +319,20 @@ function Cart() {
                         <span className='prod-title'><Link to={`/itemdetail/${prod.product._id}`}>{prod.product.title}</Link></span>
                         <span>Color: {prod.variant.color}, talle: {prod.variant.size}</span>
                         <div className='div-btn-remove'>
-                          <button className='btn-remove-prod' onClick={() => removeProductCart(prod.product._id, prod.quantity, prod.variant.color, prod.variant.size, index)} title='Quitar del carrito'>Eliminar</button>
+                          <button className='btn-remove-prod' onClick={() => removeProductCart(prod.product._id, prod.quantity, prod.variant.color, prod.variant.size, index, prod.unitPrice)} title='Quitar del carrito'>Eliminar</button>
                         </div>
                       </div>
-                        <div className='div-quantity'> {/* div para manejar la cantidad de producto */}
-                          <button className='btn-minus' onClick={() => decrease(prod.product._id, prod._id, prod.variant.color, prod.variant.size)}  disabled={prod.quantity === 1 ? true: false}>
-                            <FontAwesomeIcon icon={faMinus} />
-                          </button>
-                          <span>{prod.quantity}</span>
-                          <button onClick={() => increase(prod.product._id, prod._id, prod.variant.color, prod.variant.size)} className='btn-plus' disabled={prod.quantity === maxProds(index, prod.variant.color, prod.variant.size)? true : false}>
+                      <div className='div-quantity'> {/* div para manejar la cantidad de producto */}
+                        <button className='btn-minus' onClick={() => decrease(prod.product._id, prod._id, prod.variant.color, prod.variant.size)} disabled={prod.quantity === 1 ? true : false}>
+                          <FontAwesomeIcon icon={faMinus} />
+                        </button>
+                        <span>{prod.quantity}</span>
+                        <button onClick={() => increase(prod.product._id, prod._id, prod.variant.color, prod.variant.size)} className='btn-plus' disabled={prod.quantity === maxProds(index, prod.variant.color, prod.variant.size) ? true : false}>
                           <FontAwesomeIcon icon={faPlus} />
-                          </button>
-                        </div>
+                        </button>
+                      </div>
                       <div className='div-price-cart'>
-                        <span>$ {prod.unitPrice * prod.quantity }</span>
+                        <span>$ {prod.unitPrice * prod.quantity}</span>
                       </div>
                     </div>
                   )
@@ -217,41 +344,64 @@ function Cart() {
                   <span>Productos: {cantProds}</span>
                   <span className='span-total'>Total: ${total}</span>
                 </div>
-                {end === 'mp' ?
+                {end === 'mp' &&
                   <div className='div-pay-option'>
                     <button onClick={() => endPurchase(false)} className='btn-back-pay' title='Elegir otro medio de pago'>
                       <FontAwesomeIcon icon={faSquareMinus} color='red' />
                     </button>
                     <PagoComponent />
                   </div>
-                  :
-                  end === 'cash' ?
-                    <div className='div-pay-option'>
-                      <button onClick={() => endPurchase(false)} className='btn-back-pay' title='Elegir otro medio de pago'>
-                        <FontAwesomeIcon icon={faSquareMinus} color='red' />
-                      </button>
-                      <button className='btn-pay-cash' onClick={cashPay}>Generar orden de compra</button>
+                }
+                {end === 'cash' &&
+                  <div className='div-pay-option'>
+                    <button onClick={() => endPurchase(false)} className='btn-back-pay' title='Elegir otro medio de pago'>
+                      <FontAwesomeIcon icon={faSquareMinus} color='red' />
+                    </button>
+                    <button className='btn-pay-cash' onClick={cashPay}>Generar orden de compra</button>
+                  </div>
+                }
+                {end === 'getnet' &&
+                  <div className='div-pay-option'>
+                    <GetnetComponent items={products} idCart={cid} />
+                  </div>
+                }
+                {usuario && !end ?
+                  <div className='div-btns-pay'>
+                    <div className='div-select'>
+                      <select name="payment_method" onChange={handleSelect} value={paymentMethod.payment_method}>
+                        <option value="">Selecciona un método de pago</option>
+                        <option value="transferencia">Transferencia</option>
+                        <option value="getnet">Link de pago Getnet</option>
+                        <option value="efectivo">Efectivo</option>
+                      </select>
                     </div>
-                    :
-                    end === 'getnet' ?
-                      <div className='div-pay-option'>
-                        <GetnetComponent items={products} idCart={cid} />
-                      </div>
-                      :
-                      <div className='div-btns-pay'>
-                        <div className='div-checkbox'>
-                          <label >Pagar con Mercado Pago</label>
-                          <input type="checkbox" checked={end} onChange={() => endPurchase('mp')} />
-                        </div>
-                        <div className='div-checkbox'>
-                          <label >Pagar en el local</label>
-                          <input type="checkbox" checked={end} onChange={() => endPurchase('cash')} />
-                        </div>
-                        <div className='div-checkbox'>
-                          <label>Pagar con GetNet</label>
-                          <input type="checkbox" checked={end} onChange={() => endPurchase('getnet')} />
-                        </div>
-                      </div>}
+                    {/* <div className='div-option-payment'>
+                      <button className='btn-option-pay' onClick={() => endPurchase('mp')}>Pagar con mercado pago</button>
+                      <label >Pagar con Mercado Pago</label>
+            <input type="checkbox" checked={payment} onChange={() => endPurchase('mp')} />
+                    </div>
+                    <div className='div-option-payment'>
+                      <button className='btn-option-pay' onClick={() => endPurchase('cash')}>Pagar en el local</button>
+                      <label >Pagar en el local</label>
+            <input type="checkbox" checked={payment} onChange={() => endPurchase('cash')} />
+                    </div> */}
+                    {paymentMethod.payment_method?
+                    <div className='div-option-payment'>
+                      {/* <label >Pagar mediante whatsapp</label> */}
+                      <button className='btn-option-pay' onClick={whatsAppRedirect}>Enviar pedido al Whats App</button>
+                    </div>
+                  :
+                  <div className='div-option-payment'>
+                  {/* <label >Pagar mediante whatsapp</label> */}
+                  <button className='btn-option-pay-disabled' disabled={true} title='Selecciona un método de pago'>Enviar pedido al Whats App</button>
+                </div>
+                  }
+                  </div> :
+                  <div>
+                    <button onClick={endPurchaseWithCookie}>Finalizar compra</button>
+                    {/* <Link to={'/endpurchase'}>Finalizar compra</Link> */}
+                  </div>
+                }
               </div>
             </div>
           </>

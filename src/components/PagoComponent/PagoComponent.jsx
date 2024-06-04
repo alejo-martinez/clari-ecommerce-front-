@@ -4,7 +4,7 @@ import { useMp } from '../context/MpContext';
 
 function PagoComponent() {
     const publicKey = process.env.REACT_APP_PUBLIC_KEY_MP;
-    const { crearPreferencia } = useMp();
+    const { crearPreferencia, prodsCookie } = useMp();
 
     const [preferenceId, setPreferenceId] = useState(null);
     const [loading, setLoading] = useState(true);

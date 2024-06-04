@@ -12,9 +12,9 @@
     display: flex;
     flex-flow: column nowrap;
     width: 200px;
-
+    /* border: 1px solid black; */
     height: 400px;
-    background-color: white;
+    background-color: #fff;
     padding: 8px;
     /* gap: 10px; */
     border-radius: 10px;

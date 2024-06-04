@@ -69,7 +69,6 @@ const ProdProvider = ({ children }) => {
             formData.append(`variants[${index}][sizes][${sizeIndex}][price]`, size.price);
         });
     });
-
         const response = await fetch(`${apiUrl}/product/`, {
             method: 'POST',
             credentials: 'include',

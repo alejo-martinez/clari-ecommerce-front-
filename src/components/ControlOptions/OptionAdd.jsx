@@ -6,13 +6,17 @@ import { useProd } from '../context/ProductContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+
 import './ControlOptions.css';
 
 function OptionAdd() {
-
+    const MySwal = withReactContent(Swal)
 
     const [producto, setProducto] = useState({ title: '', description: '', files: [], variants: [], category: '' });
     const [error, setError] = useState(null);
+    const [sizeAdd, setSizeAdd] = useState({ size: '', stock: '', price: '' })
 
     const { createProd } = useProd();
 
@@ -21,6 +25,51 @@ function OptionAdd() {
     const resetFile = () => {
         if (fileRef.current) fileRef.current.value = '';
     }
+
+    const showAlert = (i) => {
+        MySwal.fire({
+            title: 'Agregar talle',
+            html: `<div class="div-sizes-add">
+            <div class="div-size-value">
+            <label>Talle</label>
+            <input id="swal-input1" type="text" name="size" placeholder="Talle" />
+          </div>
+          <div class="div-size-value">
+            <label>Stock</label>
+            <input id="swal-input2" type="number" name="stock" placeholder="Stock" />
+          </div>
+          <div class="div-size-value">
+            <label>Precio</label>
+            <input id="swal-input3" type="number" name="price" placeholder="Precio" />
+          </div>
+          </div>`,
+            focusConfirm: false,
+            preConfirm: () => {
+                const size = document.getElementById('swal-input1').value;
+                const stock = document.getElementById('swal-input2').value;
+                const price = document.getElementById('swal-input3').value;
+
+                if (!size || !stock || !price) {
+                    Swal.showValidationMessage(`Por favor ingrese todos los datos`);
+                    return false;
+                }
+
+                return { size, stock, price };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const { size, stock, price } = result.value;
+                const obj = {...producto};
+                // console.log('Datos ingresados:', { size, stock, price });
+                obj.variants[i].sizes.push({size: size, stock: stock, price: price});
+                setProducto(obj);
+                // setSizeAdd({size: size, stock: stock, price: price});
+                // setProducto()
+                // setFormData({ size, stock, price });
+            }
+        });
+    };
+
 
     const handleChange = ({ target: { value } }) => {
         setProducto({ ...producto, 'category': value });
@@ -66,9 +115,10 @@ function OptionAdd() {
     }
 
     const addSize = (index) => {
-        const prod = { ...producto };
-        prod.variants[index].sizes.push({ size: '', stock: '', price: '' });
-        setProducto(prod);
+        // const prod = { ...producto };
+        // prod.variants[index].sizes.push({ size: '', stock: '', price: '' });
+        // setProducto(prod);
+        showAlert(index)
     }
 
 
@@ -84,8 +134,8 @@ function OptionAdd() {
         setProducto(prod);
     }
 
-    const deleteSize = (i, index) =>{
-        const prod = {...producto};
+    const deleteSize = (i, index) => {
+        const prod = { ...producto };
         prod.variants[index].sizes.splice(i, 1);
         setProducto(prod)
     }
@@ -140,18 +190,21 @@ function OptionAdd() {
                                             <button className='btn-delete-variant' onClick={() => deleteSize(i, index)}>
                                                 <FontAwesomeIcon icon={faMinus} />
                                             </button>
-                                            <div className='div-size-value'>
-                                                <label>Talle</label>
-                                                <input type="text" name='size' value={size.size} onChange={(e) => handleSize(e, i, index)} />
-                                            </div>
-                                            <div className='div-size-value'>
-                                                <label>Stock</label>
-                                                <input type="number" name='stock' onChange={(e) => handleSize(e, i, index)} />
-                                            </div>
-                                            <div className='div-size-value'>
-                                                <label>Precio</label>
-                                                <input type="number" name='price' onChange={(e) => handleSize(e, i, index)} />
-                                            </div>
+                                            <span>Talle: {size.size}</span>
+                                            <span>Stock: {size.stock}</span>
+                                            <span>Precio: {size.price}</span>
+                                            {/* <div className='div-size-value'>
+                                            <label>Talle</label>
+                                            <input type="text" name='size' value={size.size} onChange={(e) => handleSize(e, i, index)} />
+                                        </div>
+                                        <div className='div-size-value'>
+                                            <label>Stock</label>
+                                            <input type="number" name='stock' onChange={(e) => handleSize(e, i, index)} />
+                                        </div>
+                                        <div className='div-size-value'>
+                                            <label>Precio</label>
+                                            <input type="number" name='price' onChange={(e) => handleSize(e, i, index)} />
+                                        </div> */}
                                         </div>
                                     );
                                 })}

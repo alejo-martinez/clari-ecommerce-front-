@@ -14,6 +14,7 @@ const TicketDetail = () => {
     const { getTicketById } = useCart();
     const [ticket, setTicket] = useState(null);
     const [loading, setLoading] = useState(true);
+    console.log(ticket)
 
     const navigation = useNavigate();
 
@@ -69,9 +70,9 @@ const TicketDetail = () => {
                             {ticket.products.map(prod => (
                                 <div key={prod._id} className="div-each-item">
                                     <span>Producto: {prod.product.title}</span>
-                                    <span>Cantidad: {prod.quantity} unidades</span>
-                                    <span>Precio unitario: ${prod.product.price}</span>
-                                    <span className="ticket-field-important">Precio x{prod.quantity} unidades: ${prod.product.price * prod.quantity}</span>
+                                    <span>Cantidad: {prod.quantity > 1? `${prod.quantity} unidades` : `${prod.quantity} unidad`}</span>
+                                    <span>Precio unitario: ${prod.unitPrice}</span>
+                                    <span className="ticket-field-important">Precio x{prod.quantity > 1? `${prod.quantity} unidades` : `${prod.quantity} unidad`}: ${prod.unitPrice * prod.quantity}</span>
                                 </div>
                             ))}
                         </div>
@@ -82,7 +83,7 @@ const TicketDetail = () => {
                             <span className="ticket-field-important">Monto total: ${ticket.amount}</span>
                             <span className="ticket-field-important">Estado de la compra: {ticket.status}</span>
                         </div>
-                        {ticket.status === 'Pendiente de pago'?
+                        {ticket.status === 'pending'?
                         <div className="div-btns-ticket">
                             <button className="btn-ticket payed" onClick={()=> approvePay(ticket._id)}>Marcar como pagado</button>
                             <button className="btn-ticket canceled" onClick={()=> deleteOrder(ticket._id)}>Cancelar Orden</button>

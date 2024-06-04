@@ -6,7 +6,7 @@
     height: fit-content;
     width: fit-content;
     margin: auto;
-    background-color: #D2B48C;
+    background-color: rgb(236, 2, 115);;
     margin-top: 5rem;
     padding: 8px;
     border-radius: 6px;
@@ -60,8 +60,9 @@
 
 .btn-login{ /* Estilos para el boton de login y registro */ 
     border: none;
-    background-color: #8F9779;
+    background-color: rgb(130, 212, 86);
     color: #fff;
+    font-weight: bold;
     padding: 8px;
     border-radius: 6px;
     transition: all 0.4s;
@@ -69,12 +70,12 @@
 
 .btn-login:hover{ /* Estilos al hacer hover en boton de login y registro */
     cursor: pointer;
-    background-color: #8f97798f;
+    background-color: rgba(130, 212, 86, 0.822);
 }
 
 .link-forgotpass{
     margin: 5px 0;
-    color: #555555;
+    color: #dddddd;
     /* font-weight: bold; */
     transition: all 0.4s;
 }

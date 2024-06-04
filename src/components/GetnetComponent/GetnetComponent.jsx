@@ -27,7 +27,7 @@ function GetnetComponent({items, idCart}) {
         return{
           'id': `${prod.product._id}`,
           'name': `${prod.product.title}`,
-          'unitPrice':{ 'currency': '032', 'amount': Number(prod.price)},
+          'unitPrice':{ 'currency': '032', 'amount': Number(prod.unitPrice)},
           'quantity': Number(prod.quantity)
         }
       })
