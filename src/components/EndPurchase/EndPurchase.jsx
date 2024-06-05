@@ -49,7 +49,6 @@ function EndPurchase() {
   }
 
   const handleSelect = ({target: {name, value}}) =>{
-    console.log({name: name, value: value})
     setPaymentMethod({[name]: value});
   }
 
