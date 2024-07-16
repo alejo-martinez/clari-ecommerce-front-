@@ -88,13 +88,14 @@ const ProdProvider = ({ children }) => {
     }
 
     const updateProd = async(id, valueProd)=>{
+        // console.log(valueProd)
         const response = await fetch(`${apiUrl}/product/${id}`,{
             method:'PUT',
             credentials:'include',
             headers:{
                 "Content-Type":"application/json"
             },
-            body:JSON.stringify({field: valueProd.field, value: valueProd.value})
+            body:JSON.stringify(valueProd)
         });
         const json = await response.json();
         return json;

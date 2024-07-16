@@ -1,22 +1,22 @@
 .div-prod-edit{
-    /* display: flex;
+    display: flex;
     flex-flow: column wrap;
     max-width: 500px;
-    height: 700px;
+    /* height: 700px; */
     margin: auto;
     background-color: white;
     padding: 8px;
     border-radius: 8px;
     margin-bottom: 2rem;
-    justify-content: space-around; */
-    display: grid;
+    justify-content: space-around;
+    /* display: grid;
     grid-template-areas: 
     "img variant"
     "title variant"
-    "description variant";
+    "description variant"; */
 }
 
-.title{
+/* .title{
     grid-area: title;
 }
 
@@ -26,7 +26,7 @@
 
 .img{
     grid-area: img;
-}
+} */
 
 .div-prop{
     /* display: grid;
@@ -34,7 +34,7 @@
     margin: 8px 0; */
     display: flex;
     flex-flow: column nowrap;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 .span-prop{
@@ -74,13 +74,13 @@
     margin: 4rem 0;
 }
 
-.div-each-variant{
+/* .div-each-variant{
     border: 1px solid black;
-}
+} */
 
 .div-each-size{
     background-color: #fff;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 .div-span-value{

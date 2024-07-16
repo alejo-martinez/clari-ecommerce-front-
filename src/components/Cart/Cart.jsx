@@ -44,11 +44,13 @@ function Cart() {
   const [end, setEnd] = useState(false); // Estado que determina el renderizado del componente de pago
   const [payStatus, setPayStatus] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState({payment_method: ''});
+  const [loader, setLoader] = useState(false);
 
   // const [mpPay, setMpPay] = useState(null);
   // const [cashPay, setCashPay] = useState(null);
 
   const whatsAppRedirect = async() => {
+    setLoader(true);
     let quantity = 0;
     let amount = 0;
     // let userCookie;
@@ -61,7 +63,7 @@ function Cart() {
     const objData = {products: products, quantity: quantity, amount: amount, payment_method: paymentMethod.payment_method, status: 'pending', userCookie: usuario};
     const resp = await createTicket(objData);
     if(resp.status === 'success'){
-
+      setLoader(false);
       const nroTel = '543424777555';
       const msg = sendMessage(usuario, products, paymentMethod.payment_method);
       const msgCodificado = encodeURIComponent(msg);
@@ -397,8 +399,8 @@ function Cart() {
                 </div>
                   }
                   </div> :
-                  <div>
-                    <button onClick={endPurchaseWithCookie}>Finalizar compra</button>
+                  <div  className='div-option-payment'>
+                    <button onClick={endPurchaseWithCookie} className='btn-option-pay'>Finalizar compra</button>
                     {/* <Link to={'/endpurchase'}>Finalizar compra</Link> */}
                   </div>
                 }

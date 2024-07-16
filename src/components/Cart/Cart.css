@@ -121,7 +121,7 @@
 .div-pay-option{
     display: flex;
     flex-flow: column nowrap;
-    width: 100%;
+    /* width: fit-content; */
 }
 
 .btn-back-pay{
@@ -129,6 +129,7 @@
     border: none;
     align-items: flex-end;
     cursor: pointer;
+    /* margin: auto; */
 }
 
 .btn-pay-cash{

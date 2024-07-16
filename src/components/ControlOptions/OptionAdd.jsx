@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useProd } from '../context/ProductContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
@@ -60,12 +60,8 @@ function OptionAdd() {
             if (result.isConfirmed) {
                 const { size, stock, price } = result.value;
                 const obj = {...producto};
-                // console.log('Datos ingresados:', { size, stock, price });
-                obj.variants[i].sizes.push({size: size, stock: stock, price: price});
+                obj.variants[i].sizes.push({size: size.toUpperCase(), stock: stock, price: price});
                 setProducto(obj);
-                // setSizeAdd({size: size, stock: stock, price: price});
-                // setProducto()
-                // setFormData({ size, stock, price });
             }
         });
     };
@@ -175,7 +171,7 @@ function OptionAdd() {
                         return (
                             <div key={`el${index}`} className='div-input-color'>
                                 <button className='btn-delete-variant' onClick={() => deleteVariant(index)}>
-                                    <FontAwesomeIcon icon={faMinus} />
+                                    <FontAwesomeIcon icon={faXmark} />
                                 </button>
                                 <div className='container-color'>
                                     <div className='div-form-color'>
@@ -184,15 +180,16 @@ function OptionAdd() {
                                     </div>
                                     <button type='button' onClick={() => addSize(index)} className='btn-add-size'>+ talle</button>
                                 </div>
+                                {el.sizes.length > 0 && <h5>Talles agregados:</h5>}
                                 {el.sizes.map((size, i) => {
                                     return (
                                         <div key={`sizeNro${i}`} className='div-input-size'>
+                                            <span>Talle: {size.size}</span>
+                                            <span>Stock: {size.stock}</span>
+                                            <span>Precio: ${size.price}</span>
                                             <button className='btn-delete-variant' onClick={() => deleteSize(i, index)}>
                                                 <FontAwesomeIcon icon={faMinus} />
                                             </button>
-                                            <span>Talle: {size.size}</span>
-                                            <span>Stock: {size.stock}</span>
-                                            <span>Precio: {size.price}</span>
                                             {/* <div className='div-size-value'>
                                             <label>Talle</label>
                                             <input type="text" name='size' value={size.size} onChange={(e) => handleSize(e, i, index)} />

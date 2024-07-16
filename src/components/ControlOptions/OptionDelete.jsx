@@ -64,7 +64,7 @@ function OptionDelete() {
                 <tr key={prod._id}>
                     <td>{prod._id}</td>
                     <td>{prod.title}</td>
-                    <td><img src={prod.imageUrl} alt="" width={75} height={75}/></td>
+                    <td><img src={prod.imagesUrl[0]} alt="" width={75} height={75}/></td>
                     <td><button className='btn-delete' onClick={()=> handleRemove(prod._id)}><FontAwesomeIcon icon={faTrashCan} /></button></td>
                 </tr>
                     )

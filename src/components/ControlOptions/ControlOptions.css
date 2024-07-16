@@ -9,7 +9,7 @@
     max-width: 400px;
     margin: auto;
     margin-top: 4rem;
-    background-color: #D2B48C;
+    background-color: rgb(180, 180, 180);
     padding: 8px;
     border-radius: 10px;
     margin-bottom: 2rem;
@@ -33,7 +33,7 @@
 .div-input-color{
     display: flex;
     flex-flow: column nowrap;
-    background-color: grey;
+    background-color: rgb(180, 180, 180);
     justify-items: center;
     gap: 4px;
     margin-bottom: 10px;
@@ -47,16 +47,9 @@
 
 .div-input-size{
     display: flex;
-    flex-flow: column wrap;
-    gap: 7px;
-    /* border: 1px solid black; */
-    width: 70%;
-    margin: auto;
-    margin-top: 10px;
-    background-color: black;
+    flex-flow: row wrap;
+    justify-content: space-around;
     border-radius: 6px;
-    padding: 8px;
-    /* justify-items: center; */
 }
 
 .btn-add-variant{
@@ -133,11 +126,12 @@
     margin: auto;
     margin-top: 2rem;
     border: none;
-    background-color: #8F9779;
     color: #fff;
     padding: 8px;
     border-radius: 6px;
     transition: all 0.4s;
+    background-color: #042231;
+    font-weight: bold;
 }
 
 .btn-create:hover{
@@ -175,7 +169,7 @@
     justify-content: space-around;
     align-items: center;
     margin: 10px;
-    background-color: #D2B48C;
+    background-color: rgb(180, 180, 180);
     border-radius: 6px;
 }
 

@@ -6,6 +6,8 @@ import GetnetComponent from '../GetnetComponent/GetnetComponent';
 
 import { toast } from 'react-toastify';
 
+import Cookies from 'js-cookie';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faSquareMinus } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,7 +22,7 @@ import './EndPurchase.css'
 function EndPurchase() {
 
   const location = useLocation();
-  // const {cart} = useAuth();
+
   const {createTicket} = useCart();
   const { setUserCookie } = useMp()
 
@@ -31,10 +33,11 @@ function EndPurchase() {
   const [error, setError] = useState(null);
   const [payment, setPayment] = useState('');
   const [paymentMethod, setPaymentMethod] = useState({paymentMethod: ''});
+  const [loading, setLoading] = useState(false)
 
   const { prods, cid } = location.state;
 
-  // console.log(prods)
+
   const endPurchase = (arg) => { // Función para renderizar la vista del componente de pago.
     setPayment(arg);
   }
@@ -53,19 +56,21 @@ function EndPurchase() {
   }
 
   const selectPayment = () => {
-    if(user.name.trim() !== '' && user.surname.trim() !== '' && user.email.trim() !== ''){
+    if(user.name.trim() === '' || user.surname.trim() === '' || user.email.trim() === '' ||  paymentMethod.paymentMethod === ''){
+      toast.error('Debes completar todos los datos', { position: "top-right", autoClose: 5000, hideProgressBar: true, closeOnClick: true, pauseOnHover: true })
+    } else{
       setUserCookie({ name: user.name, surname: user.surname, email: user.email, cart: { products: prods, _id: cid } })
       setEnd('select')
-    } else{
-      toast.error('Debes completar todos los datos')
     }
   }
+
   const whatsAppRedirect = async() => {
+    setLoading(true)
+    let cookie = Cookies.get('shop_cart');
+    cookie = JSON.parse(cookie);
     let quantity = 0;
     let amount = 0;
-    // let userCookie;
-    // if(usuario) userCookie = usuario;
-    // if(!usuario) userCookie = user;
+
     prods.forEach(p =>{
       quantity += Number(p.quantity);
       amount += (Number(p.quantity) * Number(p.unitPrice));
@@ -73,11 +78,13 @@ function EndPurchase() {
     const objData = {products: prods, quantity: quantity, amount: amount, payment_method: paymentMethod.paymentMethod, status: 'pending', userCookie: user};
     const resp = await createTicket(objData);
     if(resp.status === 'success'){
-
+      Cookies.set('shop_cart', JSON.stringify({_id: cookie._id, products: []}));
+      
       const nroTel = '543424777555';
       const msg = sendMessage(user, prods, paymentMethod.paymentMethod);
       const msgCodificado = encodeURIComponent(msg);
       const url = `https://api.whatsapp.com/send?phone=${nroTel}&text=${msgCodificado}`;
+      setLoading(false)
       window.location.href = url;
     }
   }
@@ -126,7 +133,7 @@ function EndPurchase() {
               </select>
             </div>
             <div className='div-btn-end'>
-              <button onClick={selectPayment} className='btn-login'>Elegir el medio de pago</button>
+              <button onClick={selectPayment} className='btn-select-payment'>Confirmar</button>
             </div>
           </div>
         </div>
@@ -147,6 +154,9 @@ function EndPurchase() {
           <div className='div-option-payment'>
             {/* <label >Pagar mediante whatsapp</label> */}
             <button className='btn-option-pay' onClick={whatsAppRedirect}>Enviar pedido al Whats App</button>
+            {loading && 
+            <div className='loader'></div>
+            }
           </div>
           {/* <div className='div-option-payment'>
             <button className='btn-option-pay' onClick={() => endPurchase('mp')}>Pagar con mercado pago</button>

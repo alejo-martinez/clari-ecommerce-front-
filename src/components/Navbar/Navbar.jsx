@@ -61,11 +61,11 @@ function Navbar() {
                                     <div className='panel-user-true'>
                                         <div className='panel-user-true-links'>
                                             <Link to={"/profile"}>
-                                                <FontAwesomeIcon icon={faUser} color='white' className='btn-user'/>
+                                                <FontAwesomeIcon icon={faUser} color='#000000' className='btn-user'/>
                                             </Link>
                                             {usuario.rol === 'client' ?
-                                                <Link to={`/cart/${usuario.cart._id}`}>
-                                                    <FontAwesomeIcon icon={faCartShopping} color='#fff' className='link-panel'/>
+                                                <Link to={`/cart/${usuario.cart._id}`} >
+                                                    <FontAwesomeIcon icon={faCartShopping} className='link-panel'/>
                                                 </Link>
                                                 :
                                                 ''
@@ -84,7 +84,7 @@ function Navbar() {
                                 <div className='links-nav'>
                                     <button onClick={goLogin} className='buttonlink-login'>Iniciar sesión</button>
                                     <Link to={"/register"} className='link link-register'>Registrarse</Link>
-                                    <Link to={`/cart/${cart._id}`}><FontAwesomeIcon icon={faCartShopping}/></Link>
+                                    <Link to={`/cart/${cart._id}`}><FontAwesomeIcon icon={faCartShopping} className='link-panel'/></Link>
                                 </div>
                             }
                         </div>

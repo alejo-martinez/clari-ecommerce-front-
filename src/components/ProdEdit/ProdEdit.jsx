@@ -7,43 +7,87 @@ import { toast } from 'react-toastify';
 
 import Slider from 'react-slick';
 import Arrow from '../CustomArrows/Arrow';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './ProdEdit.css';
 
 function ProdEdit(prop) {
+    const MySwal = withReactContent(Swal)
     const { getById, updateProd, updateImage } = useProd();
     const { pid, fnBack } = prop;
 
     const [edit, setEdit] = useState('');
     const [producto, setProducto] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [valueProd, setValueProd] = useState({ field: '', value: '', subId:'', sizeId: ''});
+    const [valueProd, setValueProd] = useState({ field: '', value: '', subId: '', sizeId: '' });
 
-    const handleUpdate = async (subId, sizeId) => {
-        if(subId){
-            setValueProd({...valueProd, subId: subId})
-            if(sizeId) setValueProd({...valueProd, sizeId: sizeId});
+    const handleUpdate = async (subId, sizeId, body) => {
+        try {
+            let updatedValueProd = { ...valueProd };
+            if (!body) {
+                if (subId) updatedValueProd.subId = subId;
+                if (sizeId) updatedValueProd.sizeId = sizeId;
+            }
+
+            const dataToSend = body || updatedValueProd;
+
+            // Enviamos los datos al backend
+            const resp = await updateProd(pid, dataToSend);
+
+            if (resp.status === 'succes') {
+                // Actualizamos el estado del producto con los nuevos valores
+                const updatedField = dataToSend.field || valueProd.field;
+                const updatedValue = dataToSend.value || valueProd.value;
+
+                if (resp.payload) setProducto(resp.payload);
+                else {
+                    setProducto(prevProducto => ({
+                        ...prevProducto,
+                        [updatedField]: updatedValue
+                    }));
+                }
+                toast.success(resp.message, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    closeButton: false
+                });
+
+                // Reseteamos el estado valueProd
+                setValueProd({ field: '', value: '', subId: '', sizeId: '' });
+                setEdit('');
+            } else if (resp.status === 'error') {
+                toast.error(resp.error, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true
+                });
+            }
+        } catch (error) {
+            console.error('Error during handleUpdate:', error);
+            toast.error('An unexpected error occurred.', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true
+            });
         }
-        const resp = await updateProd(pid, valueProd);
-        if (resp.status === 'succes') {
-            setProducto({ ...producto, [valueProd.field]: valueProd.value });
-            toast.success(resp.message, { position: "top-right", autoClose: 2000, hideProgressBar: true, closeOnClick: false, closeButton: false });
-            setValueProd({ field: '', value: '', subId:'' });
-            setEdit('');
-        }
-        if (resp.status === 'error') {
-            toast.error(resp.error, { position: "top-right", autoClose: 5000, hideProgressBar: true, closeOnClick: true, pauseOnHover: true });
-        }
-    }
+    };
+
 
     const handleImageUpdate = async () => {
         const resp = await updateImage(pid, valueProd.value);
         if (resp.status === 'succes') {
             setProducto({ ...producto, [valueProd.field]: valueProd.value });
             toast.success(resp.message, { position: "top-right", autoClose: 2000, hideProgressBar: true, closeOnClick: false, closeButton: false });
-            setValueProd({ field: '', value: '', subId:''});
+            setValueProd({ field: '', value: '', subId: '' });
             setEdit('');
         }
         if (resp.status === 'error') {
@@ -59,6 +103,39 @@ function ProdEdit(prop) {
     const handleImg = (e) => {
         setValueProd({ valueProd, ['value']: e.target.files[0] })
     }
+
+    const showAlert = (field, idVariant, idSize) => {
+        MySwal.fire({
+            title: `Editar ${field}`,
+            html: `<div class="div-sizes-add">
+            <div class="div-size-value">
+            <label>Valor</label>
+            <input id="swal-input1" type="text" name="value" placeholder="Nuevo valor" />
+          </div>
+          </div>`,
+            focusConfirm: false,
+            preConfirm: () => {
+                const value = document.getElementById('swal-input1').value;
+
+                if (!value) {
+                    Swal.showValidationMessage(`Por favor ingrese todos los datos`);
+                    return false;
+                }
+
+                return value;
+            }
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                // console.log(result)
+                const value = result.value;
+                const obj = { field: field, value: value, subId: idVariant, sizeId: idSize };
+                await handleUpdate(idVariant, idSize, obj);
+                // setValueProd({ ...valueProd, field: field, value: value });
+                // obj.variants[i].sizes.push({ size: size.toUpperCase(), stock: stock, price: price });
+                // setProducto(obj);
+            }
+        })
+    };
 
     const settings = {
         dots: false,
@@ -102,7 +179,7 @@ function ProdEdit(prop) {
                             <div>
                                 <span className='span-prop'>Título: </span>
                             </div>
-                            {
+                            {/* {
                                 edit === `title${producto._id}` ?
                                     <div className='div-input-update'>
                                         <input type="text" name='title' onChange={handleChange} />
@@ -111,16 +188,16 @@ function ProdEdit(prop) {
                                             <FontAwesomeIcon onClick={() => handleUpdate()} icon={faCheck} className='btn-update' />
                                         </div>
                                     </div>
-                                    :
-                                    <div className='div-span-value'>
-                                        <span >{producto.title}</span>
-                                        <div>
-                                            <FontAwesomeIcon className='btn-edit' title='actualizar título' onClick={() => setEdit(`title${producto._id}`)} icon={faCaretLeft} />
-                                        </div>
-                                    </div>
-                            }
+                                    : */}
+                            <div className='div-span-value'>
+                                <span >{producto.title}</span>
+                                <div>
+                                    <FontAwesomeIcon className='btn-edit' title='actualizar título' onClick={() => showAlert('title')} icon={faCaretLeft} />
+                                </div>
+                            </div>
+                            {/* } */}
                         </div>
-                        <div className="div-prop img">
+                        {/* <div className="div-prop img">
                             <span className='span-prop'>Imagen: </span>
 
                             {
@@ -146,10 +223,10 @@ function ProdEdit(prop) {
                                         <FontAwesomeIcon onClick={() => setEdit(`img${producto._id}`)} className='btn-edit' title='actualizar imagen' icon={faCaretLeft} />
                                     </div>
                             }
-                        </div>
+                        </div> */}
                         <div className='div-prop description'>
                             <span className='span-prop'>Descripcion: </span>
-                            {
+                            {/* {
                                 edit === `description${producto._id}` ?
                                     <div className='div-input-update'>
                                         <input type="text" onChange={handleChange} name='description' />
@@ -158,21 +235,22 @@ function ProdEdit(prop) {
                                             <FontAwesomeIcon onClick={() => handleUpdate()} icon={faCheck} className='btn-update' />
                                         </div>
                                     </div>
-                                    :
-                                    <div className='div-span-value'>
-                                        <span >{producto.description}</span>
-                                        <div>
-                                            <FontAwesomeIcon onClick={() => setEdit(`description${producto._id}`)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
-                                        </div>
-                                    </div>
-                            }
+                                    : */}
+                            <div className='div-span-value'>
+                                <span >{producto.description}</span>
+                                <div>
+                                    <FontAwesomeIcon onClick={() => showAlert('description')} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
+                                </div>
+                            </div>
+                            {/* } */}
                         </div>
                         <div className='div-prop'>
                             {producto.variants.map((item, i) => {
+
                                 return (
                                     <div key={`variant${i}`} className='div-each-variant'>
                                         <span>Color:</span>
-                                        {
+                                        {/* {
                                             edit === `color${producto._id}` ?
                                                 <div className='div-input-update'>
                                                     <input type="number" onChange={handleChange} name='color' />
@@ -181,40 +259,31 @@ function ProdEdit(prop) {
                                                         <FontAwesomeIcon onClick={() => handleUpdate(item._id)} icon={faCheck} className='btn-update' />
                                                     </div>
                                                 </div>
-                                                :
-                                                <div className='div-span-value'>
-                                                    <span >{item.color}</span>
-                                                    <div>
-                                                        <FontAwesomeIcon onClick={() => setEdit(`description${producto._id}`)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
-                                                    </div>
-                                                </div>
-                                        }
+                                                : */}
+                                        <div className='div-span-value'>
+                                            <span >{item.color}</span>
+                                            <div>
+                                                <FontAwesomeIcon onClick={() => showAlert('color', item._id)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
+                                            </div>
+                                        </div>
+                                        {/* } */}
                                         {item.sizes.map((it, index) => {
                                             return (
                                                 <div className='div-each-size'>
                                                     <div>
                                                         <span>Talle:</span>
-                                                        {
-                                                            edit === `size${producto._id}` ?
-                                                                <div className='div-input-update'>
-                                                                    <input type="text" onChange={handleChange} name='size' />
-                                                                    <div className='btns-update'>
-                                                                        <FontAwesomeIcon onClick={() => setEdit('')} icon={faXmark} className='btn-cancel' />
-                                                                        <FontAwesomeIcon onClick={() => handleUpdate(item._id, it._id)} icon={faCheck} className='btn-update' />
-                                                                    </div>
-                                                                </div>
-                                                                :
-                                                                <div className='div-span-value'>
-                                                                    <span >{it.size}</span>
-                                                                    <div>
-                                                                        <FontAwesomeIcon onClick={() => setEdit(`size${producto._id}`)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
-                                                                    </div>
-                                                                </div>
-                                                        }
+
+                                                        <div className='div-span-value'>
+                                                            <span >{it.size}</span>
+                                                            <div>
+                                                                <FontAwesomeIcon onClick={() => showAlert('size', item._id, it._id)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                     <div>
                                                         <span>Precio</span>
-                                                        {
+                                                        {/* {
                                                             edit === `price${producto._id}` ?
                                                                 <div className='div-input-update'>
                                                                     <input type="number" onChange={handleChange} name='price' />
@@ -223,18 +292,18 @@ function ProdEdit(prop) {
                                                                         <FontAwesomeIcon onClick={() => handleUpdate(item._id, it._id)} icon={faCheck} className='btn-update' />
                                                                     </div>
                                                                 </div>
-                                                                :
-                                                                <div className='div-span-value'>
-                                                                    <span >{it.price}</span>
-                                                                    <div>
-                                                                        <FontAwesomeIcon onClick={() => setEdit(`price${producto._id}`)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
-                                                                    </div>
-                                                                </div>
-                                                        }
+                                                                : */}
+                                                        <div className='div-span-value'>
+                                                            <span >{it.price}</span>
+                                                            <div>
+                                                                <FontAwesomeIcon onClick={() => showAlert('price', item._id, it._id)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
+                                                            </div>
+                                                        </div>
+                                                        {/* } */}
                                                     </div>
                                                     <div>
                                                         <span>Stock</span>
-                                                        {
+                                                        {/* {
                                                             edit === `color${producto._id}` ?
                                                                 <div className='div-input-update'>
                                                                     <input type="number" onChange={handleChange} name='stock' />
@@ -243,14 +312,14 @@ function ProdEdit(prop) {
                                                                         <FontAwesomeIcon onClick={() => handleUpdate(item._id, it._id)} icon={faCheck} className='btn-update' />
                                                                     </div>
                                                                 </div>
-                                                                :
-                                                                <div className='div-span-value'>
-                                                                    <span >{it.stock}</span>
-                                                                    <div>
-                                                                        <FontAwesomeIcon onClick={() => setEdit(`stock${producto._id}`)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
-                                                                    </div>
-                                                                </div>
-                                                        }
+                                                                : */}
+                                                        <div className='div-span-value'>
+                                                            <span >{it.stock}</span>
+                                                            <div>
+                                                                <FontAwesomeIcon onClick={() => showAlert('stock', item._id, it._id)} className='btn-edit' title='actualizar descripción' icon={faCaretLeft} />
+                                                            </div>
+                                                        </div>
+                                                        {/* } */}
                                                     </div>
                                                 </div>
                                             )
